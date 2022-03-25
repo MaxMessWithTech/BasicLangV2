@@ -1,11 +1,16 @@
 from utils.operators import operatorList
 
+# Splits the line up into it's individual values so it can find the Vars
+# Ex:   "Test Var: " + testVar + " " + testVar3 -> 
+#       ['"TestVar:"', '+', 'testVar', '+', '" "', '+', 'testVar3']
 def splitByOpp(line) -> list:
+    # line = line.replace(" ", "")
     out = list()
-    lastIndex = 0
+    lastIndex = -1
     for x in range(len(line)):
         if line[x] in operatorList:
-            out.append(line[lastIndex:x])
+            out.append(line[lastIndex + 1:x])
             out.append(line[x])
             lastIndex = x
+    out.append(line[lastIndex + 1:])
     return out

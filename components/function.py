@@ -18,9 +18,9 @@ class Function:
             self.comp.append(figureOutShit(fixedLine))
 
     # PURPOSE: Run Functions
-    def run(self, varSetCallback, varGetCallback, funcCallback):
+    def run(self, varAddCallback, varGetCallback, funcCallback):
         for obj in self.comp:
-            obj.run(varSetCallback, varGetCallback, funcCallback)
+            obj.run(varAddCallback, varGetCallback, funcCallback)
 
     @staticmethod
     def getIndent(line):

@@ -5,7 +5,7 @@ class Print:
         self.line = line
         self.fixLine = self.removeDecloration(self.fixLine(line))
     
-    def run(self, varSetCallback, varGetCallback, funcCallback):
+    def run(self, varAddCallback, varGetCallback, funcCallback):
         figureOutVars.figureOutVars(self.fixLine, varGetCallback)
         mathHandler.stringToMath(self.fixLine)
         if self.fixLine.count('"') == 2:

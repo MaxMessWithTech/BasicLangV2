@@ -1,11 +1,12 @@
 from components.print import Print
 from components.functionCall import FunctionCall
+from components.var import Var
 from utils.blcolors import blcolors
 
 # This is a list, it does things, don't question it future Max
 # "()" is for functions
-typesOfObjects = ["print", "delay", "if", "else", "if else", "()"]
-objects = [Print, None, None, None, None, FunctionCall]
+typesOfObjects = ["print", "delay", "if", "else", "if else", "()", "="]
+objects = [Print, None, None, None, None, FunctionCall, Var]
 
 # PURPOSE - This is gonna figure out which object should be created 
 #           as I'm stupid and this is annoying

@@ -21,7 +21,7 @@ run:
 	# testVar = "Max"
 	# testVar2 = 123
 	# testVar3 = testVar + " Miller"
-	print("Test Var: " + testVar + " " + testVar3)
+	print("Test Var: " + testVar + " " +testVar3)
 	print(4 + 1)
 	# sleep(1)
 	# func()

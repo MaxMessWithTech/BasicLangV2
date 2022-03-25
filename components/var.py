@@ -1,4 +1,4 @@
-from utils.figureOutVars import figureOutVars
+from utils.declorationInterpreter import declorationInterpreter
 from utils.splitByOpp import splitByOpp
 
 class Var:
@@ -8,5 +8,6 @@ class Var:
         self.value = ""
     
     def run(self, varAddCallback, varGetCallback, funcCallback):
-        self.name = self.line[:self.line.index("=")].strip(" ", "")
-        self.value = figureOutVars(self.line[self.line.index("=") + 1:])
+        self.name = self.line[:self.line.index("=")].replace(" ", "")
+        self.value = declorationInterpreter(self.line[self.line.index("=") + 1:], varGetCallback)
+        varAddCallback(self)

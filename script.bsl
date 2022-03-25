@@ -18,7 +18,7 @@ func:
 run:
 	func()
 	# testVar4 = testVar
-	# testVar = "Max"
+	testVar = "Max"
 	# testVar2 = 123
 	# testVar3 = testVar + " Miller"
 	print("Test Var: " + testVar + " " +testVar3)

@@ -1,4 +1,4 @@
-from utils import mathHandler, figureOutVars
+from utils import declorationInterpreter, mathHandler
 
 class Print:
     def __init__(self, line) -> None:
@@ -6,7 +6,7 @@ class Print:
         self.fixLine = self.removeDecloration(self.fixLine(line))
     
     def run(self, varAddCallback, varGetCallback, funcCallback):
-        figureOutVars.figureOutVars(self.fixLine, varGetCallback)
+        declorationInterpreter.declorationInterpreter(self.fixLine, varGetCallback)
         mathHandler.stringToMath(self.fixLine)
         if self.fixLine.count('"') == 2:
             print(self.convertString(self.fixLine))

@@ -10,7 +10,7 @@ objects = [Print, None, None, None, None, FunctionCall, Var]
 
 # PURPOSE - This is gonna figure out which object should be created 
 #           as I'm stupid and this is annoying
-def figureOutShit(line):
+def interpretObj(line):
     obj = None
     for type in typesOfObjects:
         if type in line:
@@ -21,7 +21,7 @@ def figureOutShit(line):
 
     if obj == None:
         print(
-            f"{blcolors.RED}{blcolors.BOLD}ERROR at figureOutShit() [Creates Object From String]" + 
+            f"{blcolors.RED}{blcolors.BOLD}ERROR at interpretObj() [Creates Object From String]" + 
             f"{blcolors.CLEAR}{blcolors.RED} -> Object call of \"{line}\" is invalid and doesn't exist" +
             blcolors.CLEAR)
     return obj

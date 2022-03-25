@@ -1,6 +1,6 @@
 import copy
 from utils.blcolors import blcolors
-from utils.figureOutMyShit import figureOutShit
+from utils.interpretObj import interpretObj
 
 class Function:
     def __init__(self, name):
@@ -15,7 +15,8 @@ class Function:
             indent = self.getIndent(line)
             self.printLn(f"Reading line: {fixedLine}, with an indent: {indent}.")
             # This finds the object, I was angry programing, don't question it
-            self.comp.append(figureOutShit(fixedLine))
+
+            self.comp.append(interpretObj(fixedLine))
 
     # PURPOSE: Run Functions
     def run(self, varAddCallback, varGetCallback, funcCallback):

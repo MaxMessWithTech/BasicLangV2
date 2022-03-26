@@ -1,11 +1,12 @@
-
-# Takes a line with spaces between operators and removes them 
+# Takes a line with spaces between operators and removes them
 # while leaving the strings with spaces be
 def removeSpacesNotInStr(line) -> str:
-    strStart = line.index('"')    
+    strStart = line.index('"')
     strEnd = line.index('"', strStart + 1)
     # print(line[strStart:strEnd])
-    return line[strStart:strEnd+1]
+    return line[strStart:strEnd + 1]
+
+
 """
 # DO NOT USE - DOES NOT WORK
 def removeSpacesNotInStr(line) -> str:

@@ -2,6 +2,7 @@ import copy
 from utils.blcolors import blcolors
 from utils.interpretObj import interpretObj
 
+
 class Function:
     def __init__(self, name):
         self.lines = list()
@@ -37,7 +38,7 @@ class Function:
 
     def printLn(self, text):
         print(
-            f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" + 
-            f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.BLUE}]" + 
+            f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+            f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.BLUE}]" +
             f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
         )

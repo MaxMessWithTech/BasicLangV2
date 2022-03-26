@@ -1,6 +1,7 @@
 from utils.operators import operatorList
 
-# Splits the line up into it's individual values so it can find the Vars
+
+# Splits the line-up into its individual values, so it can find the Vars
 # Ex:   "Test Var: " + testVar + " " + testVar3 -> 
 #       ['"TestVar:"', '+', 'testVar', '+', '" "', '+', 'testVar3']
 def splitByOpp(line) -> list:

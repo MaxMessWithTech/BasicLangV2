@@ -8,6 +8,7 @@ from utils.blcolors import blcolors
 typesOfObjects = ["print", "delay", "if", "else", "if else", "()", "="]
 objects = [Print, None, None, None, None, FunctionCall, Var]
 
+
 # PURPOSE - This is gonna figure out which object should be created 
 #           as I'm stupid and this is annoying
 def interpretObj(line):
@@ -19,9 +20,9 @@ def interpretObj(line):
             except TypeError:
                 pass
 
-    if obj == None:
+    if obj is None:
         print(
-            f"{blcolors.RED}{blcolors.BOLD}ERROR at interpretObj() [Creates Object From String]" + 
+            f"{blcolors.RED}{blcolors.BOLD}ERROR at interpretObj() [Creates Object From String]" +
             f"{blcolors.CLEAR}{blcolors.RED} -> Object call of \"{line}\" is invalid and doesn't exist" +
             blcolors.CLEAR)
     return obj

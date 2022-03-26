@@ -1,4 +1,4 @@
-# This is what all of the files reference to split up a decloration
+# This is what all the files reference to split up a declaration
 # EX: print("Test" + test) -> ["test", test]
 operatorList = ["+", "-", "*", "/"]
 operators = '-*/\+'

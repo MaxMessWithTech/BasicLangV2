@@ -3,11 +3,6 @@ from components.function import Function
 from utils.blcolors import blcolors
 from utils.thereBeACommentInOurMidst import handleComment
 
-# List of types of objects
-# AKA the part I'm dreading
-objType = [
-    "print"
-]
 
 class Code:
     def __init__(self, lines):
@@ -106,7 +101,7 @@ class Code:
     
     @staticmethod
     def runFooter():
-        print(f"\r\n{blcolors.GREEN}{blcolors.BOLD}--------End--------{blcolors.CLEAR}\r\n")
+        print(f"\r\n{blcolors.GREEN}{blcolors.BOLD}--------End--------{blcolors.CLEAR}")
 
 
     @staticmethod

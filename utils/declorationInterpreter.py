@@ -4,9 +4,9 @@ from utils.removeSpacesNotInStr import removeSpacesNotInStr
 from utils.operators import operatorList
 
 
-# Decloration Interpreter
+# Declaration Interpreter
 # Finding Var references and replaces them with their value in the line
-def declorationInterpreter(line, getVars) -> str:    
+def declarationInterpreter(line, getVars) -> str:
     vars = getVars()
     splitLine = splitByOpp(line)
     for x in range(len(splitLine)):

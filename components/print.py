@@ -1,12 +1,13 @@
 from utils import declorationInterpreter, mathHandler
 
+
 class Print:
     def __init__(self, line) -> None:
         self.line = line
-        self.fixLine = self.removeDecloration(self.fixLine(line))
+        self.fixLine = self.removeDeclaration(self.fixLine(line))
     
     def run(self, varAddCallback, varGetCallback, funcCallback):
-        declorationInterpreter.declorationInterpreter(self.fixLine, varGetCallback)
+        declorationInterpreter.declarationInterpreter(self.fixLine, varGetCallback)
         mathHandler.stringToMath(self.fixLine)
         if self.fixLine.count('"') == 2:
             print(self.convertString(self.fixLine))
@@ -16,7 +17,7 @@ class Print:
         return line.replace('"', "")
 
     @staticmethod
-    def removeDecloration(line):
+    def removeDeclaration(line):
         return line.replace('print(', "").replace(')', "")
 
     @staticmethod

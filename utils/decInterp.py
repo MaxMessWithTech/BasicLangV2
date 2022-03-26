@@ -88,7 +88,6 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
     # THIS IS ALSO NOT GREAT, OH WELL
     output = ""
     for line in splitLine:
-        print(output)
         output = output + line
 
     # Check to see if they are different types, if so throw an error

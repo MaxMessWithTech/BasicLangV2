@@ -20,7 +20,7 @@ run:
 	# testVar4 = testVar
 	testVar = "Max"
 	# testVar2 = 123
-	# testVar3 = testVar + " Miller"
+	testVar3 = testVar + " Miller"
 	print("Test Var: " + testVar + " " +testVar3)
 	print(4 + 1)
 	# sleep(1)

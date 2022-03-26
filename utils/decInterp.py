@@ -34,9 +34,9 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
 
         # Checks for a number CURRENTLY ASSUMES IT'S AN INT
         elif splitLine[x].replace(" ", "").isnumeric():
-            if "int" not in dataTypes and len(dataTypes) != 0 and valid:
+            if "numb" not in dataTypes and len(dataTypes) != 0 and valid:
                 valid = False
-            dataTypes.append("int")
+            dataTypes.append("numb")
 
             splitLine[x] = splitLine[x].replace(" ", "")
 
@@ -52,8 +52,8 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
                     # Since type() gives a weird string, this converts it
                     if type(var.value) is str:
                         varType = "str"
-                    elif type(var.value) is int:
-                        varType = "int"
+                    elif type(var.value) is int or type(var.value) is float:
+                        varType = "numb"
                     else:
                         varType = None
                     if varType not in dataTypes and len(dataTypes) != 0 and valid:

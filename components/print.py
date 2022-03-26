@@ -1,4 +1,4 @@
-from utils import decInterp, mathHandler
+from utils import decInterp, mathHandler, blcolors, removeOpps
 
 
 class Print:
@@ -10,15 +10,19 @@ class Print:
     def run(self, varAddCallback, varGetCallback, funcCallback):
         editLine, dataTypes, valid = decInterp.decInterp(self.fixLine, varGetCallback)
 
-
-        mathHandler.stringToMath(editLine)
-
-        if self.fixLine.count('"') == 2:
-            print(self.convertString(self.fixLine))
+        # If it's a number, send it to the math handler
+        if valid and "numb" in dataTypes:
+            print(mathHandler.stringToMath(editLine))
+        # If it's a string, print the string
+        elif valid and "str" in dataTypes:
+            print(self.convertString(editLine))
+        elif not valid:
+            print(f"{blcolors.blcolors.MAGENTA}Couldn't Print: print({blcolors.blcolors.RED}{editLine}{blcolors.blcolors.MAGENTA})" +
+                  f" because it contains an error.{blcolors.blcolors.CLEAR}")
 
     @staticmethod
     def convertString(line):
-        return line.replace('"', "")
+        return removeOpps.removeOpps(line.replace('"', ""))
 
     @staticmethod
     def removeDeclaration(line):

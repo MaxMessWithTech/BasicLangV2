@@ -8,7 +8,8 @@ class Print:
 
     # This is called during runtime
     def run(self, varAddCallback, varGetCallback, funcCallback):
-        editLine = decInterp.decInterp(self.fixLine, varGetCallback)
+        editLine, dataTypes, valid = decInterp.decInterp(self.fixLine, varGetCallback)
+
 
         mathHandler.stringToMath(editLine)
 

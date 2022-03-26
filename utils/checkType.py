@@ -4,3 +4,4 @@ def checkType(splitLine) -> bool:
 
     This makes sure the output from the Declaration Interpreter is all the same type
     """
+

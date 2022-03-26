@@ -10,5 +10,6 @@ class Var:
     
     def run(self, varAddCallback, varGetCallback, funcCallback):
         self.name = self.line[:self.line.index("=")].replace(" ", "")
-        self.value = decInterp(self.line[self.line.index("=") + 1:], varGetCallback)
+        self.value = decInterp(self.line[self.line.index("=") + 1:], varGetCallback)[0]
+        print(f"VAR CREATED WITH VALUE: {self.value}")
         varAddCallback(self)

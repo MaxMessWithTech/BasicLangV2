@@ -5,6 +5,13 @@ from utils.operators import operatorList
 # Ex:   "Test Var: " + testVar + " " + testVar3 -> 
 #       ['"TestVar:"', '+', 'testVar', '+', '" "', '+', 'testVar3']
 def splitByOpp(line) -> list:
+    """
+    --Split By Operator--
+
+    Splits the line-up into its individual values, so it can find the Vars
+    Ex:     "Test Var: " + testVar + " " + testVar3 ->
+            ['"TestVar:"', '+', 'testVar', '+', '" "', '+', 'testVar3']
+    """
     # line = line.replace(" ", "")
     out = list()
     lastIndex = -1

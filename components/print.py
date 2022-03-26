@@ -1,14 +1,17 @@
-from utils import declorationInterpreter, mathHandler
+from utils import decInterp, mathHandler
 
 
 class Print:
     def __init__(self, line) -> None:
         self.line = line
         self.fixLine = self.removeDeclaration(self.fixLine(line))
-    
+
+    # This is called during runtime
     def run(self, varAddCallback, varGetCallback, funcCallback):
-        declorationInterpreter.declarationInterpreter(self.fixLine, varGetCallback)
-        mathHandler.stringToMath(self.fixLine)
+        editLine = decInterp.decInterp(self.fixLine, varGetCallback)
+
+        mathHandler.stringToMath(editLine)
+
         if self.fixLine.count('"') == 2:
             print(self.convertString(self.fixLine))
 

@@ -4,7 +4,7 @@ from utils.blcolors import blcolors
 def stringToMath(string):
     printLn(string)
 
-    # print(eval(string))
+    print(eval(string))
 
 
 def printLn(text):

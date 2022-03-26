@@ -1,4 +1,4 @@
-from utils.declorationInterpreter import declarationInterpreter
+from utils.decInterp import decInterp
 from utils.splitByOpp import splitByOpp
 
 
@@ -10,5 +10,5 @@ class Var:
     
     def run(self, varAddCallback, varGetCallback, funcCallback):
         self.name = self.line[:self.line.index("=")].replace(" ", "")
-        self.value = declarationInterpreter(self.line[self.line.index("=") + 1:], varGetCallback)
+        self.value = decInterp(self.line[self.line.index("=") + 1:], varGetCallback)
         varAddCallback(self)

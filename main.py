@@ -1,8 +1,20 @@
+import sys
+from os.path import exists
 from components.code import Code
+from utils.blcolors import blcolors
 
 
 if __name__ == "__main__":
-    file = open("./script.bsl", "r")
-    codeObj = Code(file.readlines())
-    codeObj.compile()
-    codeObj.run()
+    if sys.argv[1] == "help":
+        print(
+            f"{blcolors.CYAN}\r\n----------------------\r\n{blcolors.BOLD}Basic Lang\r\n" +
+            f"{blcolors.CLEAR}{blcolors.CYAN}Created by: Max Miller\r\n----------------------\r\n{blcolors.CLEAR}"
+        )
+
+    fileName = sys.argv[1]
+    file_exists = exists(fileName)
+    if file_exists:
+        file = open(fileName, "r")
+        codeObj = Code(file.readlines())
+        codeObj.compile()
+        codeObj.run()

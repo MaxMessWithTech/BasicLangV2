@@ -1,0 +1,2 @@
+def trueFalse(splitLine):
+    pass

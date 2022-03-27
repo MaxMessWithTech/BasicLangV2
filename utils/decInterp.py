@@ -4,14 +4,15 @@ from utils.blcolors import blcolors
 from utils.splitByOpp import splitByOpp
 from utils.removeSpacesNotInStr import removeSpacesNotInStr
 from utils.operators import operatorList
+from utils.mathHandler import stringToMath
 
 DEBUG = False
 
 
-def decInterp(line, getVars, formatted=False) -> Tuple[str, list, bool]:
+def decInterp(line, getVars) -> Tuple[str, list, bool]:
     """
     --Declaration Interpreter--
-    Inputs: line(str) - Current Value, getVars(def) - call back, formatted(bool) - get a printable string
+    Inputs: line(str) - Current Value, getVars(def) - call back
     Returns: Formatted Line(str), Data Type(list), valid(bool)
 
     Finding Var references and replaces them with their value in the line
@@ -74,10 +75,8 @@ def decInterp(line, getVars, formatted=False) -> Tuple[str, list, bool]:
 
         # Check for an operator
         elif splitLine[x] in operatorList:
-            # If we want an output without operators, then remove it
-            if formatted:
-                splitLine[x] = ""
             # Nothing needs to be changed because of the way the splitByOpp function works
+            pass
 
         else:
             # !!ERROR!! INVALID DATA TYPE
@@ -90,8 +89,28 @@ def decInterp(line, getVars, formatted=False) -> Tuple[str, list, bool]:
     # Rebuild string
     # THIS IS ALSO NOT GREAT, OH WELL
     output = ""
+    formatOut = ""
     for line in splitLine:
         output = output + line
+        if line not in operatorList:
+            formatOut = formatOut + line
+
+    # If it's a number, keep the operators
+    if valid and "numb" in dataTypes:
+        output = ""
+        for line in splitLine:
+            output = output + line
+
+        output = stringToMath(output)
+    # If it's a string, don't keep the operators
+    else:
+        output = ""
+        for line in splitLine:
+            if line not in operatorList:
+                output = output + line
+        # This removes ALL quotation marks,
+        # if I eventually want to add support for \" then this will need to be changed
+        output = output.replace('"', "")
 
     # Check to see if they are different types, if so throw an error
     if not valid:
@@ -100,9 +119,4 @@ def decInterp(line, getVars, formatted=False) -> Tuple[str, list, bool]:
             f"{blcolors.RED}  INVALID CONCATENATION OF DIFFERENT TYPES:  {output}{blcolors.CLEAR}"
         )
 
-    if DEBUG:
-        print(
-            f"{blcolors.MAGENTA}[{blcolors.BOLD}Declaration Interpreter{blcolors.CLEAR}{blcolors.MAGENTA}]" +
-            f"{blcolors.MAGENTA}  Returning output: {output}{blcolors.CLEAR}"
-        )
     return output, dataTypes, valid

@@ -8,21 +8,11 @@ class Print:
 
     # This is called during runtime
     def run(self, varAddCallback, varGetCallback, funcCallback):
-        editLine, dataTypes, valid = decInterp.decInterp(self.fixLine, varGetCallback, formatted=True)
+        editLine, dataTypes, valid = decInterp.decInterp(self.fixLine, varGetCallback)
 
-        # If it's a number, send it to the math handler
-        if valid and "numb" in dataTypes:
-            print(mathHandler.stringToMath(editLine))
-        # If it's a string, print the string
-        elif valid and "str" in dataTypes:
-            print(self.convertString(editLine))
-        elif not valid:
-            print(f"{blcolors.blcolors.MAGENTA}Couldn't Print: print({blcolors.blcolors.RED}{editLine}{blcolors.blcolors.MAGENTA})" +
-                  f" because it contains an error.{blcolors.blcolors.CLEAR}")
-
-    @staticmethod
-    def convertString(line):
-        return line.replace('"', "")
+        # This removes ALL quotation marks,
+        # if I eventually want to add support for \" then this will need to be changed
+        print(editLine)
 
     @staticmethod
     def removeDeclaration(line):

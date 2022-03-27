@@ -8,9 +8,10 @@ from utils.operators import operatorList
 DEBUG = False
 
 
-def decInterp(line, getVars) -> Tuple[str, list, bool]:
+def decInterp(line, getVars, formatted=False) -> Tuple[str, list, bool]:
     """
     --Declaration Interpreter--
+    Inputs: line(str) - Current Value, getVars(def) - call back, formatted(bool) - get a printable string
     Returns: Formatted Line(str), Data Type(list), valid(bool)
 
     Finding Var references and replaces them with their value in the line
@@ -32,7 +33,7 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
 
             splitLine[x] = removeSpacesNotInStr(splitLine[x])
 
-        # Checks for a number CURRENTLY ASSUMES IT'S AN INT
+        # Checks for a number
         elif splitLine[x].replace(" ", "").isnumeric():
             if "numb" not in dataTypes and len(dataTypes) != 0 and valid:
                 valid = False
@@ -73,8 +74,10 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
 
         # Check for an operator
         elif splitLine[x] in operatorList:
+            # If we want an output without operators, then remove it
+            if formatted:
+                splitLine[x] = ""
             # Nothing needs to be changed because of the way the splitByOpp function works
-            pass
 
         else:
             # !!ERROR!! INVALID DATA TYPE

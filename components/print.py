@@ -1,4 +1,4 @@
-from utils import decInterp, mathHandler, blcolors, removeOpps
+from utils import decInterp, mathHandler, blcolors
 
 
 class Print:
@@ -8,7 +8,7 @@ class Print:
 
     # This is called during runtime
     def run(self, varAddCallback, varGetCallback, funcCallback):
-        editLine, dataTypes, valid = decInterp.decInterp(self.fixLine, varGetCallback)
+        editLine, dataTypes, valid = decInterp.decInterp(self.fixLine, varGetCallback, formatted=True)
 
         # If it's a number, send it to the math handler
         if valid and "numb" in dataTypes:
@@ -22,7 +22,7 @@ class Print:
 
     @staticmethod
     def convertString(line):
-        return removeOpps.removeOpps(line.replace('"', ""))
+        return line.replace('"', "")
 
     @staticmethod
     def removeDeclaration(line):

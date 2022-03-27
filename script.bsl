@@ -1,8 +1,8 @@
 func:
 	print("Func")
 
-	# if (testVar=="Max"):
-		# print ("hello Max!!!!")
+	if (testVar=="Max"):
+		print ("hello Max!!!!")
 		# if (true == false):
 			# print("TRUE")
 		# else:

@@ -1,8 +1,8 @@
 func:
 	print("Func")
 
-	if (testVar=="Max"):
-		print ("hello Max!!!!")
+	if(testVar == "Max"):
+		print("hello Max!!!!")
 		# if (true == false):
 			# print("TRUE")
 		# else:
@@ -11,4 +11,7 @@ func:
 		# print("Hello " + testVar)
 
 run:
+	print("Run")
+	testVar = "Max"
+	print(testVar + " Miller")
 	func()

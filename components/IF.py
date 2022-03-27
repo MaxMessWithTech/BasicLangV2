@@ -52,7 +52,7 @@ class If:
     def run(self, varAddCallback, varGetCallback, funcCallback):
         # CHECK IF TRUE
         editLine, dataTypes, valid = decInterp(self.fixLine, varGetCallback)
-        print(editLine)
+        self.printLn(editLine)
 
         for obj in self.comp:
             obj.run(varAddCallback, varGetCallback, funcCallback)

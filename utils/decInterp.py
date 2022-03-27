@@ -3,7 +3,7 @@ from typing import Tuple
 from utils.blcolors import blcolors
 from utils.splitByOpp import splitByOpp
 from utils.removeSpacesNotInStr import removeSpacesNotInStr
-from utils.operators import operatorList
+from utils.operators import operatorList, conditionalOperators
 from utils.mathHandler import stringToMath
 
 DEBUG = False
@@ -73,6 +73,10 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
                 )
                 splitLine[x] = f"{blcolors.RED}[{blcolors.BOLD}ERROR{blcolors.CLEAR}{blcolors.RED}]{blcolors.CLEAR}"
 
+        # Check for a conditional operator
+        elif splitLine[x] in conditionalOperators:
+            dataTypes.append("conditional")
+
         # Check for an operator
         elif splitLine[x] in operatorList:
             # Nothing needs to be changed because of the way the splitByOpp function works
@@ -102,6 +106,11 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
             output = output + line
 
         output = stringToMath(output)
+    # If it's an if statement, keep the operators
+    elif valid and "conditional" in dataTypes:
+        output = ""
+        for line in splitLine:
+            output = output + line
     # If it's a string, don't keep the operators
     else:
         output = ""

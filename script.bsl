@@ -1,7 +1,7 @@
 func:
 	print("Func")
 
-	if(testVar == "Max"):
+	if(testVar + " Miller" == "Max Miller"):
 		print("hello Max!!!!")
 		# if (true == false):
 			# print("TRUE")

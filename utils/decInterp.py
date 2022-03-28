@@ -5,6 +5,7 @@ from utils.splitByOpp import splitByOpp
 from utils.removeSpacesNotInStr import removeSpacesNotInStr
 from utils.operators import operatorList, conditionalOperators
 from utils.mathHandler import stringToMath
+from utils.trueFalse import trueFalse
 
 DEBUG = False
 
@@ -80,7 +81,10 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
         # Check for an operator
         elif splitLine[x] in operatorList:
             # Nothing needs to be changed because of the way the splitByOpp function works
-            pass
+
+            # Check to make sure that if it's a string, it's using "+"
+            if "str" in dataTypes and splitLine[x] != "+":
+                valid = False
 
         else:
             # !!ERROR!! INVALID DATA TYPE
@@ -93,11 +97,6 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
     # Rebuild string
     # THIS IS ALSO NOT GREAT, OH WELL
     output = ""
-    formatOut = ""
-    for line in splitLine:
-        output = output + line
-        if line not in operatorList:
-            formatOut = formatOut + line
 
     # If it's a number, keep the operators
     if valid and "numb" in dataTypes:
@@ -108,6 +107,7 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
         output = stringToMath(output)
     # If it's an if statement, keep the operators
     elif valid and "conditional" in dataTypes:
+        trueFalse(splitLine)
         output = ""
         for line in splitLine:
             output = output + line

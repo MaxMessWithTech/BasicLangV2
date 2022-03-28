@@ -1,4 +1,5 @@
 from utils.operators import operatorList
+
 import re
 
 
@@ -18,15 +19,17 @@ def splitByOpp(line) -> list:
     for opp in operatorList:
         res = [i for i in range(len(line)) if line.startswith(opp, i)]
         for index in res:
-            allIndices.append({index, opp})
-
+            allIndices.append({'index': index, 'opp': opp})
+    
     out = list()
     lastIndex = -1
-    for index, opp in allIndices:
-        out.append(line[lastIndex + 1:index])
-        out.append(line[index:index + len(opp)])
-        lastIndex = index + len(opp) - 1
+    for indexDict in allIndices:
+        out.append(line[lastIndex + 1:indexDict['index']])
+        out.append(line[indexDict['index']:indexDict['index'] + len(indexDict['opp'])])
+        # print(out)
+        lastIndex = indexDict['index'] + len(indexDict['opp']) - 1
     # REPLACE HERE GETS RID OF ":"
     out.append(line[lastIndex + 1:].replace(":", ""))
 
     return out
+

@@ -1,7 +1,7 @@
 func:
 	print("Func")
 
-	if(testVar + " Miller" == "Max Miller"):
+	if(testVar + " Miller" == "Max Miller" && testVar == "Max" || "test" != "test"):
 		print("hello Max!!!!")
 		# if (true == false):
 			# print("TRUE")
@@ -13,5 +13,5 @@ func:
 run:
 	print("Run")
 	testVar = "Max"
-	print(testVar + " Miller")
+	# print(testVar + " Miller")
 	func()

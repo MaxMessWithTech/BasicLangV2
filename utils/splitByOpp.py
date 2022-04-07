@@ -23,7 +23,7 @@ def splitByOpp(line) -> list:
     
     out = list()
     lastIndex = -1
-    for indexDict in allIndices:
+    for indexDict in sorted(allIndices, key=lambda d: d['index']):
         out.append(line[lastIndex + 1:indexDict['index']])
         out.append(line[indexDict['index']:indexDict['index'] + len(indexDict['opp'])])
         # print(out)

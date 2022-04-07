@@ -93,7 +93,7 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
                 f"{blcolors.RED}  INVALID DATA TYPE:  {repr(splitLine[x])}{blcolors.CLEAR}"
             )
             splitLine[x] = f"{blcolors.RED}[{blcolors.BOLD}ERROR{blcolors.CLEAR}{blcolors.RED}]{blcolors.CLEAR}"
-    
+
     # Rebuild string
     # THIS IS ALSO NOT GREAT, OH WELL
     output = ""
@@ -107,10 +107,18 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
         output = stringToMath(output)
     # If it's an if statement, keep the operators
     elif valid and "conditional" in dataTypes:
-        trueFalse(splitLine)
-        output = ""
-        for line in splitLine:
-            output = output + line
+        value = trueFalse(splitLine, getVars)
+        if value is None:
+            output = ""
+            for line in splitLine:
+                output = output + line
+            print(
+                f"{blcolors.RED}[{blcolors.BOLD}Conditional Interpreter{blcolors.CLEAR}{blcolors.RED}]" +
+                f"{blcolors.RED}  INVALID IF STATEMENT: {repr(output)}{blcolors.CLEAR}"
+            )
+            output = str(False)
+        else:
+            output = str(value)
     # If it's a string, don't keep the operators
     else:
         output = ""

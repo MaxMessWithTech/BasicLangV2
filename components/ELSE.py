@@ -40,8 +40,12 @@ class Else:
                     )
             else:
                 obj = interpretObj(fixedLine)
-                self.comp.append(obj)
-                lastParent = obj
+                if obj:
+                    # CASE FOR ELSE - Need to inherit value of the previous statement
+                    if type(obj) == Else:
+                        obj.setFixedLine(lastParent.line)
+                    self.comp.append(obj)
+                    lastParent = obj
 
         # Loop Through all the parents that were created
         for parent in parents:

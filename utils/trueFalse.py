@@ -49,9 +49,10 @@ def trueFalse(splitLine, getVars) -> bool:
 		elif out[x] in conditionalOperators:
 			preComp.append(out[x])
 	
-	# print(preComp)
 	# WE NEED TO HAVE THEM BE INSIDE OF EACH OTHER TO GET ONE OUTPUT
-	equalityComp = list(list())
+	# NVM - I have no idea what I was doing here 
+	# It was: "list(list())"
+	equalityComp = list()
 	handeledIndices = [0]  # Keeps track of the indices that have been added
 	for x in range(len(preComp)):
 		if preComp[x] not in equalityOperators and preComp[x] in conditionalOperators:
@@ -68,9 +69,14 @@ def trueFalse(splitLine, getVars) -> bool:
 				handeledIndices.append(x-1)
 				handeledIndices.append(x)
 				handeledIndices.append(x+1)
+		elif len(preComp) == 1:
+			equalityComp.append(preComp[x])
 		elif x not in handeledIndices:
 			return None
-	
+		# print(f"{blcolors.YELLOW}PreComp: {preComp}, preComp[x]: {preComp[x]}{blcolors.CLEAR}")
+		# print(f"{blcolors.YELLOW}equalityComp: {equalityComp}{blcolors.CLEAR}")
+
+	# print(equalityComp)
 	equalityComp = equalityComp[0]
 
 	# COMPARISON HERE | COMPARISON HERE | COMPARISON HERE
@@ -93,7 +99,7 @@ def equalityCompRecursion(equalityComp):
 	else:
 		equalityComp = doIf(equalityComp)
 
-	# print(f"{blcolors.MAGENTA}Returning equalityComp{equalityComp}{blcolors.CLEAR}")
+	# print(f"{blcolors.MAGENTA}Returning equalityComp: {equalityComp}{blcolors.CLEAR}")
 	return equalityComp
 
 

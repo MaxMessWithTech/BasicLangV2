@@ -3,10 +3,10 @@ func:
 
 	if(testVar + " Miller" == "Max Miller" && testVar == "Max" || "test" != "test"):
 		print("hello Max!!!!")
-		# if (true == false):
-			# print("TRUE")
-		# else:
-			# print("FALSE")
+		if(testVar + " Miller" == "Max Miller" && true == true):
+			print("TRUE")
+		else:
+			print("FALSE")
 	else:
 		print("Hello... " + testVar)
 

@@ -43,6 +43,14 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
 
             splitLine[x] = splitLine[x].replace(" ", "")
 
+        # Checks for boolean
+        elif splitLine[x].replace(" ", "") in ["true", "false"]:
+            if "bool" not in dataTypes and len(dataTypes) != 0 and valid:
+                valid = False
+            dataTypes.append("bool")
+
+            splitLine[x] = splitLine[x].replace(" ", "")
+
         # Checks for a var
         elif splitLine[x] not in operatorList:
 
@@ -105,8 +113,9 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
             output = output + line
 
         output = stringToMath(output)
+    
     # If it's an if statement, keep the operators
-    elif valid and "conditional" in dataTypes:
+    elif "conditional" in dataTypes:
         value = trueFalse(splitLine, getVars)
         if value is None:
             output = ""
@@ -118,7 +127,16 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
             )
             output = str(False)
         else:
+            valid = True # If it gives us a value, then it's not an invalid concatenation
             output = str(value)
+    
+    # If it's only a bool and nothing else, True False?
+    elif valid and "bool" in dataTypes and len(splitLine) == 1:
+        if splitLine[0] == "true":
+            output = str(True)
+        else:
+            output = str(False)
+    
     # If it's a string, don't keep the operators
     else:
         output = ""

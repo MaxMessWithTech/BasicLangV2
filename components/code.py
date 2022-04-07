@@ -2,6 +2,7 @@ import copy
 from components.function import Function
 from utils.blcolors import blcolors
 from utils.thereBeACommentInOurMidst import handleComment
+from components.var import Var
 
 
 class Code:

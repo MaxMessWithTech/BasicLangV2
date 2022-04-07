@@ -5,7 +5,7 @@ from utils.blcolors import blcolors
 class If:
     def __init__(self, line) -> None:
         self.line = line
-        self.fixLine = self.removeDeclaration(self.fixLine(line))
+        self.fixedLine = self.removeDeclaration(self.fixLine(line))
         self.lines = list()
         self.comp = list()
 
@@ -51,11 +51,12 @@ class If:
     # This is called during runtime
     def run(self, varAddCallback, varGetCallback, funcCallback):
         # CHECK IF TRUE
-        editLine, dataTypes, valid = decInterp(self.fixLine, varGetCallback)
-        self.printLn(editLine)
+        # editLine should return either "True" or "False"
+        editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback)
 
-        for obj in self.comp:
-            obj.run(varAddCallback, varGetCallback, funcCallback)
+        if editLine == "True":
+            for obj in self.comp:
+                obj.run(varAddCallback, varGetCallback, funcCallback)
 
     def addLine(self, line):
         self.lines.append(line)
@@ -76,6 +77,6 @@ class If:
     def printLn(self, text):
         print(
             f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-            f"IF STATEMENT ({self.fixLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+            f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
             f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
         )

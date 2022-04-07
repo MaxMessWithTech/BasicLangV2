@@ -7,8 +7,8 @@ func:
 			# print("TRUE")
 		# else:
 			# print("FALSE")
-	# else:
-		# print("Hello " + testVar)
+	else:
+		print("Hello... " + testVar)
 
 run:
 	print("Run")

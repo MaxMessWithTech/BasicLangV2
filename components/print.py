@@ -4,11 +4,11 @@ from utils import decInterp
 class Print:
     def __init__(self, line) -> None:
         self.line = line
-        self.fixLine = self.removeDeclaration(self.fixLine(line))
+        self.fixedLine = self.removeDeclaration(self.fixLine(line))
 
     # This is called during runtime
     def run(self, varAddCallback, varGetCallback, funcCallback):
-        editLine, dataTypes, valid = decInterp.decInterp(self.fixLine, varGetCallback)
+        editLine, dataTypes, valid = decInterp.decInterp(self.fixedLine, varGetCallback)
 
         # This removes ALL quotation marks,
         # if I eventually want to add support for \" then this will need to be changed

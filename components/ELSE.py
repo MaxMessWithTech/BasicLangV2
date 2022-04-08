@@ -2,11 +2,12 @@ from utils.decInterp import decInterp
 from utils.blcolors import blcolors
 
 class Else:
-    def __init__(self, line) -> None:
+    def __init__(self, line, headless=False) -> None:
         self.line = line
         self.fixedLine = ""
         self.lines = list()
         self.comp = list()
+        self.headless = headless
 
     def compile(self):
         from utils.interpretObj import interpretObj
@@ -39,7 +40,7 @@ class Else:
                         f"{blcolors.RED}  INVALID INDENTION AT LINE {fixedLine}, WITH INDENT OF {indent}{blcolors.CLEAR}"
                     )
             else:
-                obj = interpretObj(fixedLine)
+                obj = interpretObj(fixedLine, self.headless)
                 if obj:
                     # CASE FOR ELSE - Need to inherit value of the previous statement
                     if type(obj) == Else:
@@ -83,8 +84,9 @@ class Else:
         return line.replace("\n", "")
 
     def printLn(self, text):
-        print(
-            f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-            f"ELSE STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
-            f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
-        )
+        if not self.headless:
+            print(
+                f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+                f"ELSE STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+                f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
+            )

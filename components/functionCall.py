@@ -1,5 +1,5 @@
 class FunctionCall:
-    def __init__(self, line):
+    def __init__(self, line, headless=False):
         self.name = self.fixLine(line.replace("()", ""))
 
     def run(self, varSetCallback, varGetCallback, funcCallback):

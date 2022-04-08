@@ -6,11 +6,12 @@ from components.var import Var
 
 
 class Code:
-    def __init__(self, lines):
+    def __init__(self, lines, headless=False):
         self.lines = lines
         self.comp = list()
-        self.runFuncComp = Function("run")
+        self.runFuncComp = Function("run", headless=headless)
         self.vars = list()
+        self.headless = headless
     
     # PURPOSE: Convert file lines to objects
     def compile(self):
@@ -31,7 +32,7 @@ class Code:
                 if name == "run":
                     curFunc = self.runFuncComp
                 else:
-                    curFunc = Function(name)
+                    curFunc = Function(name, headless=self.headless)
                 # self.printLn("IT'S A FUNCTION!!")
             elif indent != 0:
                 curFunc.addLine(line)
@@ -89,12 +90,13 @@ class Code:
                 newLines.append(line)
         return newLines
 
-    @staticmethod
-    def compHeader():
-        print(f"-----------------------------")
-        print(f"{blcolors.CYAN}{blcolors.BOLD}BASIC LANG{blcolors.CLEAR}")
-        print("Created by: Max Miller")
-        print(f"-----------------------------")
+
+    def compHeader(self):
+        if not self.headless:
+            print(f"-----------------------------")
+            print(f"{blcolors.CYAN}{blcolors.BOLD}BASIC LANG{blcolors.CLEAR}")
+            print("Created by: Max Miller")
+            print(f"-----------------------------")
 
     @staticmethod
     def runHeader():
@@ -104,14 +106,13 @@ class Code:
     def runFooter():
         print(f"\r\n{blcolors.GREEN}{blcolors.BOLD}--------End--------{blcolors.CLEAR}")
 
-
-    @staticmethod
-    def printLn(text):
-        print(
-            f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" + 
-            f"BASE{blcolors.CLEAR}{blcolors.BLUE}]" + 
-            f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
-        )
+    def printLn(self, text):
+        if not self.headless:
+            print(
+                f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" + 
+                f"BASE{blcolors.CLEAR}{blcolors.BLUE}]" + 
+                f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
+            )
 
 """
 Compilation:

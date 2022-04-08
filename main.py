@@ -15,6 +15,11 @@ if __name__ == "__main__":
     file_exists = exists(fileName)
     if file_exists:
         file = open(fileName, "r")
-        codeObj = Code(file.readlines())
+        if "headless" in sys.argv:
+            codeObj = Code(file.readlines(), headless=True)
+        else:
+            codeObj = Code(file.readlines())
         codeObj.compile()
         codeObj.run()
+    else:
+        print(f"Invalid filename: {repr(fileName)}")

@@ -13,7 +13,7 @@ objects = [Print, None, If, Else, None, FunctionCall, Var]
 
 # PURPOSE - This is gonna figure out which object should be created 
 #           as I'm stupid and this is annoying
-def interpretObj(line) -> any:
+def interpretObj(line, headless=False) -> any:
     """
     --Interpret Object--
     Inputs: line(str)
@@ -26,7 +26,7 @@ def interpretObj(line) -> any:
     for type in typesOfObjects:
         if type in line:
             try:
-                obj = objects[typesOfObjects.index(type)](line)
+                obj = objects[typesOfObjects.index(type)](line, headless=headless)
                 break
             except TypeError:
                 pass

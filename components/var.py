@@ -3,7 +3,7 @@ from utils.splitByOpp import splitByOpp
 
 
 class Var:
-    def __init__(self, line):
+    def __init__(self, line, headless=False):
         self.line = line
         self.name = ""
         self.value = ""

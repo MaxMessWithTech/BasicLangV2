@@ -2,9 +2,10 @@ from utils import decInterp
 
 
 class Print:
-    def __init__(self, line, headless=False) -> None:
+    def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
         self.line = line
         self.fixedLine = self.removeDeclaration(self.fixLine(line))
+        self.sendCommandCallback = sendCommandCallback
 
     # This is called during runtime
     def run(self, varAddCallback, varGetCallback, funcCallback):

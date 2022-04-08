@@ -6,12 +6,13 @@ from components.var import Var
 
 
 class Code:
-    def __init__(self, lines, headless=False):
+    def __init__(self, lines, headless=False, sendCommandCallback=None):
         self.lines = lines
         self.comp = list()
         self.runFuncComp = Function("run", headless=headless)
         self.vars = list()
         self.headless = headless
+        self.sendCommandCallback = sendCommandCallback
     
     # PURPOSE: Convert file lines to objects
     def compile(self):
@@ -32,7 +33,7 @@ class Code:
                 if name == "run":
                     curFunc = self.runFuncComp
                 else:
-                    curFunc = Function(name, headless=self.headless)
+                    curFunc = Function(name, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
                 # self.printLn("IT'S A FUNCTION!!")
             elif indent != 0:
                 curFunc.addLine(line)

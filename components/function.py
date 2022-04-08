@@ -5,11 +5,12 @@ from utils.interpretObj import interpretObj
 
 
 class Function:
-    def __init__(self, name, headless=False):
+    def __init__(self, name, headless=False, sendCommandCallback=None):
         self.lines = list()
         self.name = name
         self.comp = list()
         self.headless = headless
+        self.sendCommandCallback = sendCommandCallback
 
     # PURPOSE: Convert file lines to objects
     def compile(self):
@@ -35,7 +36,11 @@ class Function:
                         f"{blcolors.RED}  INVALID INDENTION AT LINE {fixedLine}, WITH INDENT OF {indent}{blcolors.CLEAR}"
                     )
             else:
-                obj = interpretObj(fixedLine, self.headless)
+                obj = interpretObj(
+                    fixedLine,
+                    headless=self.headless, 
+                    sendCommandCallback=self.sendCommandCallback)
+                
                 if obj:
                     # CASE FOR ELSE - Need to inherit value of the previous statement
                     if type(obj) == Else:

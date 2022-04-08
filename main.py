@@ -22,4 +22,9 @@ if __name__ == "__main__":
         codeObj.compile()
         codeObj.run()
     else:
-        print(f"Invalid filename: {repr(fileName)}")
+        print(f"{blcolors.RED}Invalid filename: {repr(fileName)}{blcolors.CLEAR}")
+else:
+    def run(file, sendCommandCallback=None):
+        codeObj = Code(file.readlines(), headless=True, sendCommandCallback=sendCommandCallback)
+        codeObj.compile()
+        codeObj.run()

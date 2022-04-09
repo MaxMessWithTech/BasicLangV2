@@ -1,11 +1,11 @@
 from typing import Tuple
 
-from utils.blcolors import blcolors
-from utils.splitByOpp import splitByOpp
-from utils.removeSpacesNotInStr import removeSpacesNotInStr
-from utils.operators import operatorList, conditionalOperators
-from utils.mathHandler import stringToMath
-from utils.trueFalse import trueFalse
+from interpreter.utils.blcolors import blcolors
+from interpreter.utils.splitByOpp import splitByOpp
+from interpreter.utils.removeSpacesNotInStr import removeSpacesNotInStr
+from interpreter.utils.operators import operatorList, conditionalOperators
+from interpreter.utils.mathHandler import stringToMath
+from interpreter.utils.trueFalse import trueFalse
 
 DEBUG = False
 

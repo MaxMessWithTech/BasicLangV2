@@ -1,8 +1,7 @@
 import copy
-from components.function import Function
-from utils.blcolors import blcolors
-from utils.thereBeACommentInOurMidst import handleComment
-from components.var import Var
+from interpreter.components.function import Function
+from interpreter.utils.blcolors import blcolors
+from interpreter.utils.thereBeACommentInOurMidst import handleComment
 
 
 class Code:

@@ -1,6 +1,4 @@
-from utils.operators import operatorList
-
-import re
+from interpreter.utils.operators import operatorList
 
 
 # Splits the line-up into its individual values, so it can find the Vars

@@ -1,7 +1,6 @@
-import copy
-from components.ELSE import Else
-from utils.blcolors import blcolors
-from utils.interpretObj import interpretObj
+from interpreter.components.ELSE import Else
+from interpreter.utils.blcolors import blcolors
+from interpreter.utils.interpretObj import interpretObj
 
 
 class Function:

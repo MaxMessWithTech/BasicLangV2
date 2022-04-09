@@ -1,6 +1,6 @@
-from components.ELSE import Else
-from utils.decInterp import decInterp
-from utils.blcolors import blcolors
+from interpreter.components.ELSE import Else
+from interpreter.utils.decInterp import decInterp
+from interpreter.utils.blcolors import blcolors
 
 
 class If:
@@ -12,7 +12,7 @@ class If:
         self.headless = headless
 
     def compile(self):
-        from utils.interpretObj import interpretObj
+        from interpreter.utils.interpretObj import interpretObj
 
         parents = list()
         lastParent = None  # Keeps track of the last object to add to

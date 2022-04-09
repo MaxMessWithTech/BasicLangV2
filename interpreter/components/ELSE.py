@@ -1,5 +1,5 @@
-from utils.decInterp import decInterp
-from utils.blcolors import blcolors
+from interpreter.utils.decInterp import decInterp
+from interpreter.utils.blcolors import blcolors
 
 class Else:
     def __init__(self, line, headless=False) -> None:
@@ -10,7 +10,7 @@ class Else:
         self.headless = headless
 
     def compile(self):
-        from utils.interpretObj import interpretObj
+        from interpreter.utils.interpretObj import interpretObj
 
         parents = list()
         lastParent = None  # Keeps track of the last object to add to

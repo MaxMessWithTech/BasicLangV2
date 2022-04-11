@@ -1,4 +1,4 @@
-from utils.splitByOpp import operatorList
+from interpreter.utils.splitByOpp import operatorList
 
 
 def removeOpps(line) -> str:

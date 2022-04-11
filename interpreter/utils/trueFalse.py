@@ -1,5 +1,4 @@
-from utils.operators import conditionalOperators, equalityOperators
-from utils.blcolors import blcolors
+from interpreter.utils.operators import conditionalOperators, equalityOperators
 import copy
 
 
@@ -8,8 +7,8 @@ def trueFalse(splitLine, getVars) -> bool:
 	--Conditional Interpreter--
 	Takes a if statement and finds a boolean value from it
 	"""
-	from utils.decInterp import decInterp
-	from utils.operators import operatorList
+	from interpreter.utils.decInterp import decInterp
+	from interpreter.utils.operators import operatorList
 	
 	# Find opperators
 	oppIndices = list()

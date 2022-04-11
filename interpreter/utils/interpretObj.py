@@ -1,9 +1,9 @@
-from components.ELSE import Else
+from interpreter.components.ELSE import Else
 from components.print import Print
-from components.functionCall import FunctionCall
-from components.var import Var
-from components.IF import If
-from utils.blcolors import blcolors
+from interpreter.components.functionCall import FunctionCall
+from interpreter.components.var import Var
+from interpreter.components.IF import If
+from interpreter.utils.blcolors import blcolors
 
 # This is a list, it does things, don't question it future Max
 # "()" is for functions

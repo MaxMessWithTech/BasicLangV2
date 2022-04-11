@@ -1,4 +1,4 @@
-from utils.blcolors import blcolors
+from interpreter.utils.blcolors import blcolors
 
 
 def stringToMath(string):

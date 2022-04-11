@@ -1,5 +1,4 @@
-from utils.decInterp import decInterp
-from utils.splitByOpp import splitByOpp
+from interpreter.utils.decInterp import decInterp
 
 
 class Var:

@@ -1,4 +1,4 @@
-from utils import decInterp
+from interpreter.utils import decInterp
 
 
 class Print:

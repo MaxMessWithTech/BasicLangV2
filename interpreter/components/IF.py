@@ -1,4 +1,5 @@
 from interpreter.components.ELSE import Else
+from interpreter.components.ELSEIF import ElseIf
 from interpreter.utils.decInterp import decInterp
 from interpreter.utils.blcolors import blcolors
 
@@ -37,16 +38,20 @@ class If:
                     if lastParent not in parents:
                         parents.append(lastParent)
                 except AttributeError:
-                    print(
+                    self.sendError(
                         f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-                        f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.RED}]" +
+                        f"IF ({self.fixedLine}){blcolors.CLEAR}{blcolors.RED}]" +
                         f"{blcolors.RED}  INVALID INDENTION AT LINE {fixedLine}, WITH INDENT OF {indent}{blcolors.CLEAR}"
                     )
             else:
-                obj = interpretObj(fixedLine, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
+                obj = interpretObj(fixedLine, self.sendError, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
                 if obj:
+                    if type(obj) == ElseIf:
+                        # MAX FIX!!!!!!!!
+                        # NOT IMPLEMENTED!!!!!
+                        obj.setFixedLine(lastParent.line + fixedLine)
                     # CASE FOR ELSE - Need to inherit value of the previous statement
-                    if type(obj) == Else:
+                    elif type(obj) == Else:
                         obj.setFixedLine(lastParent.line)
                     self.comp.append(obj)
                     lastParent = obj
@@ -59,7 +64,7 @@ class If:
     def run(self, varAddCallback, varGetCallback, funcCallback):
         # CHECK IF TRUE
         # editLine should return either "True" or "False"
-        editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback)
+        editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback, self.sendError, returnOutputStr=False)
 
         if editLine == "True":
             for obj in self.comp:
@@ -83,8 +88,20 @@ class If:
 
     def printLn(self, text):
         if not self.headless:
-            print(
-                f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-                f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
-                f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
-            )
+            if self.sendCommandCallback:
+                self.sendCommandCallback("debug", 
+                    f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+                    f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+                    f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+            else:
+                print(
+                    f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+                    f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+                    f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
+                )
+
+    def sendError(self, msg):
+        if self.sendCommandCallback:
+            self.sendCommandCallback("error", msg)
+        else:
+            print(msg)

@@ -1,3 +1,4 @@
+import turtle
 from typing import Tuple
 
 from interpreter.utils.blcolors import blcolors
@@ -10,7 +11,7 @@ from interpreter.utils.trueFalse import trueFalse
 DEBUG = False
 
 
-def decInterp(line, getVars) -> Tuple[str, list, bool]:
+def decInterp(line, getVars, errorCallback, returnSplitLine=False, returnOutputStr=True) -> Tuple[str, list, bool]:
     """
     --Declaration Interpreter--
     Inputs: line(str) - Current Value, getVars(def) - call back
@@ -52,18 +53,19 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
             splitLine[x] = splitLine[x].replace(" ", "")
 
         # Checks for a var
-        elif splitLine[x] not in operatorList:
+        elif splitLine[x] not in operatorList and "\x1b[31m[\x1b[1mERROR\x1b[0m\x1b[31m]\x1b[0m" not in splitLine[x]:
 
             splitLine[x] = splitLine[x].replace(" ", "")
             # THIS IS SUPER INEFFICIENT - IF THINGS ARE SLOW, THIS IS PROBABLY A PROBLEM
             for var in varList:
                 if var.name == splitLine[x]:
-                    splitLine[x] = var.value
 
                     # Since type() gives a weird string, this converts it
                     if type(var.value) is str:
+                        splitLine[x] = f"\"{var.value}\""
                         varType = "str"
                     elif type(var.value) is int or type(var.value) is float:
+                        splitLine[x] = var.value
                         varType = "numb"
                     else:
                         varType = None
@@ -76,9 +78,9 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
                 valid = False
                 dataTypes.append(None)
 
-                print(
+                errorCallback(
                     f"{blcolors.RED}[{blcolors.BOLD}Declaration Interpreter{blcolors.CLEAR}{blcolors.RED}]" +
-                    f"{blcolors.RED}  Var by name of {repr(splitLine[x])} doesn't exist!{blcolors.CLEAR}"
+                    f"{blcolors.RED}  Statement {repr(splitLine[x])} was detected as a var, but doesn't exist!{blcolors.CLEAR}"
                 )
                 splitLine[x] = f"{blcolors.RED}[{blcolors.BOLD}ERROR{blcolors.CLEAR}{blcolors.RED}]{blcolors.CLEAR}"
 
@@ -94,9 +96,10 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
             if "str" in dataTypes and splitLine[x] != "+":
                 valid = False
 
-        else:
+        # The data type doesn't exist, but we don't want to falsely detect an error
+        elif "\x1b[31m[\x1b[1mERROR\x1b[0m\x1b[31m]\x1b[0m" not in splitLine[x]:
             # !!ERROR!! INVALID DATA TYPE
-            print(
+            errorCallback(
                 f"{blcolors.RED}[{blcolors.BOLD}Declaration Interpreter{blcolors.CLEAR}{blcolors.RED}]" +
                 f"{blcolors.RED}  INVALID DATA TYPE:  {repr(splitLine[x])}{blcolors.CLEAR}"
             )
@@ -105,23 +108,30 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
     # Rebuild string
     # THIS IS ALSO NOT GREAT, OH WELL
     output = ""
+    # print("SplitLine: ", splitLine)
+
+    # Check if we need to rebuild string
+    if valid and returnSplitLine:
+        for line in splitLine:
+            output = output + "\r\n" + line
 
     # If it's a number, keep the operators
-    if valid and "numb" in dataTypes:
+    elif valid and "numb" in dataTypes:
         output = ""
         for line in splitLine:
             output = output + line
 
-        output = stringToMath(output)
+        output = stringToMath(output, errorCallback)
     
     # If it's an if statement, keep the operators
     elif "conditional" in dataTypes:
-        value = trueFalse(splitLine, getVars)
+        # print(f"Dec Out (trueFalse): {splitLine}")
+        value = trueFalse(splitLine, getVars, errorCallback)
         if value is None:
             output = ""
             for line in splitLine:
                 output = output + line
-            print(
+            errorCallback(
                 f"{blcolors.RED}[{blcolors.BOLD}Conditional Interpreter{blcolors.CLEAR}{blcolors.RED}]" +
                 f"{blcolors.RED}  INVALID IF STATEMENT: {repr(output)}{blcolors.CLEAR}"
             )
@@ -136,22 +146,31 @@ def decInterp(line, getVars) -> Tuple[str, list, bool]:
             output = str(True)
         else:
             output = str(False)
-    
+
     # If it's a string, don't keep the operators
-    else:
+    elif valid:
         output = ""
         for line in splitLine:
             if line not in operatorList:
                 output = output + line
         # This removes ALL quotation marks,
         # if I eventually want to add support for \" then this will need to be changed
-        output = output.replace('"', "")
+        # print(f"Dec Out: {output}")
+        if returnOutputStr:
+            output = output.replace('"', "")
+        else:
+            output = output.replace('"', "")
+            output = '"' + output + '"'
+    else:
+        output = ""
+        for line in splitLine:
+            output = output + line
 
     # Check to see if they are different types, if so throw an error
     if not valid:
-        print(
+        errorCallback(
             f"{blcolors.RED}[{blcolors.BOLD}Declaration Interpreter{blcolors.CLEAR}{blcolors.RED}]" +
-            f"{blcolors.RED}  INVALID CONCATENATION OF DIFFERENT TYPES:  {output}{blcolors.CLEAR}"
+            f"{blcolors.RED}  INVALID CONCATENATION OF DIFFERENT TYPES:  {repr(output)}{blcolors.CLEAR}"
         )
 
     return output, dataTypes, valid

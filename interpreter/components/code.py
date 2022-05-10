@@ -8,7 +8,7 @@ class Code:
     def __init__(self, lines, headless=False, sendCommandCallback=None):
         self.lines = lines
         self.comp = list()
-        self.runFuncComp = Function("run", headless=headless)
+        self.runFuncComp = Function("run", headless=headless, sendCommandCallback=sendCommandCallback)
         self.vars = list()
         self.headless = headless
         self.sendCommandCallback = sendCommandCallback
@@ -16,6 +16,7 @@ class Code:
     # PURPOSE: Convert file lines to objects
     def compile(self):
         self.compHeader()
+        foundRun = False
 
         for lineIndex in range(len(self.lines)):
             self.lines[lineIndex] = handleComment(self.lines[lineIndex])
@@ -30,6 +31,7 @@ class Code:
                     self.comp.append(curFunc)
                 name = fixedLine.replace(":", "")
                 if name == "run":
+                    foundRun = True
                     curFunc = self.runFuncComp
                 else:
                     curFunc = Function(name, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
@@ -38,6 +40,10 @@ class Code:
                 curFunc.addLine(line)
             self.printLn(f"Reading line: {self.fixLine(fixedLine)}, with an indent: {indent}.")
         self.comp.append(curFunc)
+        if not foundRun:
+            self.sendError(f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" + 
+                        f"BASE{blcolors.CLEAR}{blcolors.RED}]" +
+                        f"{blcolors.RED}  RUN FUNCTION NEVER FOUND{blcolors.CLEAR}")
 
         for func in self.comp:
             func.compile()
@@ -93,26 +99,49 @@ class Code:
 
     def compHeader(self):
         if not self.headless:
-            print(f"-----------------------------")
-            print(f"{blcolors.CYAN}{blcolors.BOLD}BASIC LANG{blcolors.CLEAR}")
-            print("Created by: Max Miller")
-            print(f"-----------------------------")
+            if self.sendCommandCallback:
+                self.sendCommandCallback("debug", f"-----------------------------")
+                self.sendCommandCallback("debug", f"{blcolors.CYAN}{blcolors.BOLD}BASIC LANG{blcolors.CLEAR}")
+                self.sendCommandCallback("debug", "Created by: Max Miller")
+                self.sendCommandCallback("debug", f"-----------------------------")
+            else:
+                print(f"-----------------------------")
+                print(f"{blcolors.CYAN}{blcolors.BOLD}BASIC LANG{blcolors.CLEAR}")
+                print("Created by: Max Miller")
+                print(f"-----------------------------")
 
-    @staticmethod
-    def runHeader():
-        print(f"\r\n{blcolors.GREEN}{blcolors.BOLD}------Running------{blcolors.CLEAR}\r\n")
+    def runHeader(self):
+        if self.sendCommandCallback:
+            self.sendCommandCallback("debug", 
+                f"\r\n{blcolors.GREEN}{blcolors.BOLD}------Running------{blcolors.CLEAR}")
+        else:
+            print(f"\r\n{blcolors.GREEN}{blcolors.BOLD}------Running------{blcolors.CLEAR}\r\n")
     
-    @staticmethod
-    def runFooter():
-        print(f"\r\n{blcolors.GREEN}{blcolors.BOLD}--------End--------{blcolors.CLEAR}")
+    def runFooter(self):
+        if self.sendCommandCallback:
+            self.sendCommandCallback("debug", 
+                f"\r\n{blcolors.GREEN}{blcolors.BOLD}--------End--------{blcolors.CLEAR}")
+        else:
+            print(f"\r\n{blcolors.GREEN}{blcolors.BOLD}--------End--------{blcolors.CLEAR}")
 
     def printLn(self, text):
         if not self.headless:
-            print(
-                f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" + 
-                f"BASE{blcolors.CLEAR}{blcolors.BLUE}]" + 
-                f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
-            )
+            if self.sendCommandCallback:
+                self.sendCommandCallback("debug", 
+                    f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" + 
+                    f"BASE{blcolors.CLEAR}{blcolors.BLUE}]" + 
+                    f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+            else:
+                print(
+                    f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" + 
+                    f"BASE{blcolors.CLEAR}{blcolors.BLUE}]" + 
+                    f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+    
+    def sendError(self, msg):
+        if self.sendCommandCallback:
+            self.sendCommandCallback("error", msg)
+        else:
+            print(msg)
 
 """
 Compilation:

@@ -35,13 +35,16 @@ class Else:
                     if lastParent not in parents:
                         parents.append(lastParent)
                 except AttributeError:
-                    print(
+                    self.sendError(
                         f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-                        f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.RED}]" +
+                        f"ELSE ({self.fixedLine}){blcolors.CLEAR}{blcolors.RED}]" +
                         f"{blcolors.RED}  INVALID INDENTION AT LINE {fixedLine}, WITH INDENT OF {indent}{blcolors.CLEAR}"
                     )
             else:
-                obj = interpretObj(fixedLine, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
+                obj = interpretObj(
+                    fixedLine, self.sendError, headless=self.headless, 
+                    sendCommandCallback=self.sendCommandCallback
+                )
                 if obj:
                     # CASE FOR ELSE - Need to inherit value of the previous statement
                     if type(obj) == Else:
@@ -58,7 +61,7 @@ class Else:
         # CHECK IF TRUE
         # editLine should return either "True" or "False"
         
-        editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback)
+        editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback, self.sendError, returnOutputStr=False)
 
         if editLine == "False":
             for obj in self.comp:
@@ -86,8 +89,20 @@ class Else:
 
     def printLn(self, text):
         if not self.headless:
-            print(
-                f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-                f"ELSE STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
-                f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
-            )
+            if self.sendCommandCallback:
+                self.sendCommandCallback("debug", 
+                    f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+                    f"ELSE STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+                    f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+            else:
+                print(
+                    f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+                    f"ELSE STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+                    f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
+                )
+
+    def sendError(self, msg):
+        if self.sendCommandCallback:
+            self.sendCommandCallback("error", msg)
+        else:
+            print(msg)

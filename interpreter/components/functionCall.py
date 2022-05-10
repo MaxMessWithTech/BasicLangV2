@@ -11,3 +11,9 @@ class FunctionCall:
     def fixLine(line):
         line = line.replace("\t", "")
         return line.replace("\n", "")
+
+    def sendError(self, msg):
+        if self.sendCommandCallback:
+            self.sendCommandCallback("error", msg)
+        else:
+            print(msg)

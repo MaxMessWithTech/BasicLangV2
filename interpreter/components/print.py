@@ -9,11 +9,14 @@ class Print:
 
     # This is called during runtime
     def run(self, varAddCallback, varGetCallback, funcCallback):
-        editLine, dataTypes, valid = decInterp.decInterp(self.fixedLine, varGetCallback)
+        editLine, dataTypes, valid = decInterp.decInterp(self.fixedLine, varGetCallback, self.sendError)
 
         # This removes ALL quotation marks,
         # if I eventually want to add support for \" then this will need to be changed
-        print(editLine)
+        if self.sendCommandCallback:
+            self.sendCommandCallback("log", editLine)
+        else:
+            print(editLine)
 
     @staticmethod
     def removeDeclaration(line):
@@ -23,3 +26,9 @@ class Print:
     def fixLine(line):
         line = line.replace("\t", "")
         return line.replace("\n", "")
+
+    def sendError(self, msg):
+        if self.sendCommandCallback:
+            self.sendCommandCallback("error", msg)
+        else:
+            print(msg)

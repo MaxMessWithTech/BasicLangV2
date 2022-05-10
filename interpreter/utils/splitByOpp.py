@@ -22,12 +22,18 @@ def splitByOpp(line) -> list:
     out = list()
     lastIndex = -1
     for indexDict in sorted(allIndices, key=lambda d: d['index']):
-        out.append(line[lastIndex + 1:indexDict['index']])
+        # Makes sure that when there are tuples we don't have weird gaps
+        if indexDict['opp'] != "(":
+            out.append(line[lastIndex + 1:indexDict['index']])
+        
         out.append(line[indexDict['index']:indexDict['index'] + len(indexDict['opp'])])
-        # print(out)
         lastIndex = indexDict['index'] + len(indexDict['opp']) - 1
     # REPLACE HERE GETS RID OF ":"
-    out.append(line[lastIndex + 1:].replace(":", ""))
+
+    if len(out) == 0:
+        out.append(line[lastIndex + 1:].replace(":", ""))
+    elif out[len(out) - 1] != ")":
+        out.append(line[lastIndex + 1:].replace(":", ""))
 
     return out
 

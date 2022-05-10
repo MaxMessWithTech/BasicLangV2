@@ -1,11 +1,11 @@
 from interpreter.utils.blcolors import blcolors
 
 
-def stringToMath(string):
+def stringToMath(string, errorCallback):
     try:
         return eval(string)
     except:
-        print(
+        errorCallback(
             f"{blcolors.RED}[{blcolors.BOLD}Math Handler{blcolors.CLEAR}{blcolors.RED}]" +
             f"{blcolors.RED}  INCORRECTLY IDENTIFIED {repr(string)} AS MATHEMATICAL{blcolors.CLEAR}"
         )

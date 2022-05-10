@@ -1,4 +1,5 @@
 from interpreter.components.ELSE import Else
+from interpreter.components.IF import If
 from interpreter.utils.blcolors import blcolors
 from interpreter.utils.interpretObj import interpretObj
 
@@ -29,7 +30,7 @@ class Function:
                     if lastParent not in parents:
                         parents.append(lastParent)
                 except AttributeError:
-                    print(
+                    self.sendError(
                         f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
                         f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.RED}]" +
                         f"{blcolors.RED}  INVALID INDENTION AT LINE {fixedLine}, WITH INDENT OF {indent}{blcolors.CLEAR}"
@@ -37,15 +38,27 @@ class Function:
             else:
                 obj = interpretObj(
                     fixedLine,
+                    self.sendError,
                     headless=self.headless, 
                     sendCommandCallback=self.sendCommandCallback)
                 
                 if obj:
                     # CASE FOR ELSE - Need to inherit value of the previous statement
                     if type(obj) == Else:
-                        obj.setFixedLine(lastParent.line)
-                    self.comp.append(obj)
-                    lastParent = obj
+                        if type(lastParent) == If:
+                            obj.setFixedLine(lastParent.line)
+                            self.comp.append(obj)
+                            lastParent = obj
+                        else:
+                            self.sendError(
+                                f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+                                f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.RED}]" +
+                                f"{blcolors.RED}  INVALID ELSE DEFINITION: \"{fixedLine}\", " + 
+                                f"there isn't an if statement to inherit from{blcolors.CLEAR}"
+                            )
+                    else:
+                        self.comp.append(obj)
+                        lastParent = obj
 
         # Loop Through all the parents that were created
         for parent in parents:
@@ -70,8 +83,19 @@ class Function:
 
     def printLn(self, text):
         if not self.headless:
-            print(
-                f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-                f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.BLUE}]" +
-                f"{blcolors.BLUE}  {text}{blcolors.CLEAR}"
-            )
+            if self.sendCommandCallback:
+                self.sendCommandCallback("debug", 
+                    f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+                    f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.BLUE}]" +
+                    f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+            else:
+                print(
+                    f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+                    f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.BLUE}]" +
+                    f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+
+    def sendError(self, msg):
+        if self.sendCommandCallback:
+            self.sendCommandCallback("error", msg)
+        else:
+            print(msg)

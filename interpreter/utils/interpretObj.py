@@ -1,5 +1,7 @@
 from interpreter.components.ELSE import Else
-from components.print import Print
+from interpreter.components.print import Print
+from interpreter.components.delay import Delay
+from interpreter.components.draw import Draw
 from interpreter.components.functionCall import FunctionCall
 from interpreter.components.var import Var
 from interpreter.components.IF import If
@@ -7,13 +9,13 @@ from interpreter.utils.blcolors import blcolors
 
 # This is a list, it does things, don't question it future Max
 # "()" is for functions
-typesOfObjects = ["print", "delay", "if", "else", "else if", "()", "="]
-objects = [Print, None, If, Else, None, FunctionCall, Var]
+typesOfObjects = ["print", "delay", "draw", "if", "else", "else if", "()", "="]
+objects = [Print, Delay, Draw, If, Else, None, FunctionCall, Var]
 
 
 # PURPOSE - This is gonna figure out which object should be created 
 #           as I'm stupid and this is annoying
-def interpretObj(line, headless=False, sendCommandCallback=None) -> any:
+def interpretObj(line, errorCallback, headless=False, sendCommandCallback=None) -> any:
     """
     --Interpret Object--
     Inputs: line(str)
@@ -36,7 +38,7 @@ def interpretObj(line, headless=False, sendCommandCallback=None) -> any:
                 pass
 
     if obj is None:
-        print(
+        errorCallback(
             f"{blcolors.RED}{blcolors.BOLD}ERROR at interpretObj() [Creates Object From String]" +
             f"{blcolors.CLEAR}{blcolors.RED} -> Object call of \"{line}\" is invalid and doesn't exist" +
             blcolors.CLEAR)

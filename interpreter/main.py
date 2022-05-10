@@ -1,7 +1,7 @@
 import sys
 from os.path import exists
-from components.code import Code
-from utils.blcolors import blcolors
+from interpreter.components.code import Code
+from interpreter.utils.blcolors import blcolors
 
 
 if __name__ == "__main__":

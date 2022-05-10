@@ -1,15 +1,16 @@
 from interpreter.utils.operators import conditionalOperators, equalityOperators
+from interpreter.utils.blcolors import blcolors
 import copy
 
 
-def trueFalse(splitLine, getVars) -> bool:
+def trueFalse(splitLine, getVars, errorCallback) -> bool:
 	"""
 	--Conditional Interpreter--
 	Takes a if statement and finds a boolean value from it
 	"""
 	from interpreter.utils.decInterp import decInterp
 	from interpreter.utils.operators import operatorList
-	
+
 	# Find opperators
 	oppIndices = list()
 	for x in range(len(splitLine)):
@@ -31,12 +32,14 @@ def trueFalse(splitLine, getVars) -> bool:
 		if type(out[x]) == list:
 			string = ""
 			for y in out[x]:
-				if y.find('"') == -1 and y not in operatorList:
-					y = f'"{y}"'
+				# if y.find('"') == -1 and y not in operatorList:
+					# y = f'"{y}"'
 				
 				string = string + y
-			out[x] = decInterp(string, getVars)[0]
 
+			# editLine, dataTypes, valid = decInterp(string, getVars, errorCallback, returnOutputStr=False)
+			out[x] = decInterp(string, getVars, errorCallback, returnOutputStr=False)[0]
+			# print(f"TEST2: string: {string}, editLine: {editLine}, Valid: {valid}")
 	# Time to actually do the equality comparison
 
 	preComp = list()
@@ -81,20 +84,28 @@ def trueFalse(splitLine, getVars) -> bool:
 	# COMPARISON HERE | COMPARISON HERE | COMPARISON HERE
 	output = False
 	while type(equalityComp) != bool:
-		equalityComp = equalityCompRecursion(equalityComp)
+		equalityComp = equalityCompRecursion(equalityComp, errorCallback)
 	
 	output = equalityComp
 	
 	return output
 	
-def equalityCompRecursion(equalityComp):
+def equalityCompRecursion(equalityComp, errorCallback):
 	if isListInList(equalityComp):
 		for x in range(len(equalityComp)):
 			if isListInList(equalityComp[x]):
-				equalityComp[x] = equalityCompRecursion(equalityComp[x])
+				equalityComp[x] = equalityCompRecursion(equalityComp[x], errorCallback)
 			else:
 				if type(equalityComp[x]) == list:
-					equalityComp[x] = doIf(equalityComp[x])
+					result = doIf(equalityComp[x])
+					if result == None:
+						errorCallback(
+							f"{blcolors.RED}[{blcolors.BOLD}Declaration Interpreter (Conditional Evaluator){blcolors.CLEAR}{blcolors.RED}]" +
+							f"{blcolors.RED}  INVALID Conditional: {equalityComp}{blcolors.CLEAR}"
+						)
+						equalityComp[x] = False
+					else:
+						equalityComp[x] = result
 	else:
 		equalityComp = doIf(equalityComp)
 
@@ -123,24 +134,28 @@ def isListInList(_list) -> bool:
 # This does the actual comparison because it needs to be in two places
 # And it was easier to just make a function for it
 def doIf(equalityComp):
-	if equalityComp[1] == "==":
-		if equalityComp[0] == equalityComp[2]:
-			equalityComp = True
-		else:
-			equalityComp = False
-	elif equalityComp[1] == "!=":
-		if equalityComp[0] != equalityComp[2]:
-			equalityComp = True
-		else:
-			equalityComp = False
-	elif equalityComp[1] == "&&":
-		if equalityComp[0] and equalityComp[2]:
-			equalityComp = True
-		else:
-			equalityComp = False
-	elif equalityComp[1] == "||":
-		if equalityComp[0] or equalityComp[2]:
-			equalityComp = True
-		else:
-			equalityComp = False
-	return equalityComp
+	try:
+		if equalityComp[1] == "==":
+			if equalityComp[0] == equalityComp[2]:
+				equalityComp = True
+			else:
+				equalityComp = False
+		elif equalityComp[1] == "!=":
+			if equalityComp[0] != equalityComp[2]:
+				equalityComp = True
+			else:
+				equalityComp = False
+		elif equalityComp[1] == "&&":
+			if equalityComp[0] and equalityComp[2]:
+				equalityComp = True
+			else:
+				equalityComp = False
+		elif equalityComp[1] == "||":
+			if equalityComp[0] or equalityComp[2]:
+				equalityComp = True
+			else:
+				equalityComp = False
+		return equalityComp
+	# If there isn't a proport comp sign, it will give an index error
+	except IndexError:
+		return False

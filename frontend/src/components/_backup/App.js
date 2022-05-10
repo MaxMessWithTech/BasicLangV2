@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import Modal from "./components/Modal.js";
+import Modal from "./Modal.js";
 import axios from "axios";
 
 class App extends Component {

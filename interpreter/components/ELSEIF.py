@@ -12,6 +12,8 @@ class ElseIf:
         self.headless = headless
         self.sendCommandCallback = sendCommandCallback
 
+        print("Create Else If")
+
     def compile(self):
         from interpreter.utils.interpretObj import interpretObj
 
@@ -61,9 +63,13 @@ class ElseIf:
         # editLine should return either "True" or "False"
         editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback, self.sendError, returnOutputStr=False)
 
-        if editLine == "True":
+        if editLine == "False":
             for obj in self.comp:
                 obj.run(varAddCallback, varGetCallback, funcCallback)
+
+    def setFixedLine(self, line):
+        self.line = line
+        self.fixedLine = self.removeDeclaration(self.fixLine(line))
 
     def addLine(self, line):
         self.lines.append(line)

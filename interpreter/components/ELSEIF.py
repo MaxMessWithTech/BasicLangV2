@@ -59,6 +59,7 @@ class ElseIf:
 
     # This is called during runtime
     def run(self, varAddCallback, varGetCallback, funcCallback):
+        print(self.fixedLine)
         # CHECK IF TRUE
         # editLine should return either "True" or "False"
         editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback, self.sendError, returnOutputStr=False)
@@ -68,6 +69,7 @@ class ElseIf:
                 obj.run(varAddCallback, varGetCallback, funcCallback)
 
     def setFixedLine(self, line):
+        print(line)
         self.line = line
         self.fixedLine = self.removeDeclaration(self.fixLine(line))
 
@@ -81,7 +83,7 @@ class ElseIf:
     @staticmethod
     def removeDeclaration(line):
         # CURRENTLY REQUIRES ONE SPACE
-        return line.replace('else if(', "").replace(')', "")
+        return line.replace("else if(", "").replace(')', "")
 
     @staticmethod
     def fixLine(line):

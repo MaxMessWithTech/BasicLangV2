@@ -46,12 +46,14 @@ class If:
 			else:
 				obj = interpretObj(fixedLine, self.sendError, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
 				if obj:
+					"""
 					if type(obj) == ElseIf:
 						# MAX FIX!!!!!!!!
 						# NOT IMPLEMENTED!!!!!
-						obj.setFixedLine(lastParent.line + fixedLine)
+						obj.setFixedLine(lastParent.line + "&&" + fixedLine)
+					"""
 					# CASE FOR ELSE - Need to inherit value of the previous statement
-					elif type(obj) == Else:
+					if type(obj) == Else:
 						obj.setFixedLine(lastParent.line)
 					self.comp.append(obj)
 					lastParent = obj
@@ -90,9 +92,9 @@ class If:
 		if not self.headless:
 			if self.sendCommandCallback:
 				self.sendCommandCallback("debug",
-				                         f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-				                         f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
-				                         f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+										 f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+										 f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+										 f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
 			else:
 				print(
 					f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +

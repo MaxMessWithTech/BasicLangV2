@@ -33,8 +33,13 @@ def decInterp(line, getVars, errorCallback, returnSplitLine=False, returnOutputS
             if "str" not in dataTypes and len(dataTypes) != 0 and valid:
                 valid = False
             dataTypes.append("str")
-
-            splitLine[x] = removeSpacesNotInStr(splitLine[x])
+            try:
+                splitLine[x] = removeSpacesNotInStr(splitLine[x])
+            except ValueError:
+                errorCallback(
+                    f"{blcolors.RED}[{blcolors.BOLD}Declaration Interpreter{blcolors.CLEAR}{blcolors.RED}]" +
+                    f"{blcolors.RED}  Statement {repr(splitLine[x])} was detected as a string, but is invalid!{blcolors.CLEAR}"
+                )
 
         # Checks for a number
         elif splitLine[x].replace(" ", "").isnumeric():
@@ -80,7 +85,7 @@ def decInterp(line, getVars, errorCallback, returnSplitLine=False, returnOutputS
 
                 errorCallback(
                     f"{blcolors.RED}[{blcolors.BOLD}Declaration Interpreter{blcolors.CLEAR}{blcolors.RED}]" +
-                    f"{blcolors.RED}  Statement {repr(splitLine[x])} was detected as a var, but doesn't exist!{blcolors.CLEAR}"
+                    f"{blcolors.RED}  Statement {repr(splitLine[x])} was detected as a var, but didn't exist or is invalid!{blcolors.CLEAR}"
                 )
                 splitLine[x] = f"{blcolors.RED}[{blcolors.BOLD}ERROR{blcolors.CLEAR}{blcolors.RED}]{blcolors.CLEAR}"
 

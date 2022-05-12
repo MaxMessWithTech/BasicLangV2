@@ -11,7 +11,7 @@ from interpreter.utils.blcolors import blcolors
 # This is a list, it does things, don't question it future Max
 # "()" is for functions
 typesOfObjects = ["print", "delay", "draw", "else if", "if", "else", "()", "="]
-objects = [Print, Delay, Draw, None, If, Else, FunctionCall, Var]
+objects = [Print, Delay, Draw, ElseIf, If, Else, FunctionCall, Var]
 
 
 # PURPOSE - This is gonna figure out which object should be created 
@@ -36,7 +36,11 @@ def interpretObj(line, errorCallback, headless=False, sendCommandCallback=None) 
                 )
                 break
             except TypeError:
-                pass
+                errorCallback(
+                    f"{blcolors.RED}{blcolors.BOLD}ERROR at interpretObj() [Creates Object From String]" +
+                    f"{blcolors.CLEAR}{blcolors.RED} -> Object call of \"{line}\" isn't IMPLEMENTED!" +
+                    blcolors.CLEAR)
+                break
 
     if obj is None:
         errorCallback(

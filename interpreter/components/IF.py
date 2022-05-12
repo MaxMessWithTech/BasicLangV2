@@ -7,6 +7,10 @@ from interpreter.utils.blcolors import blcolors
 class If:
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
+		# New Handeling method
+		self.parent = None
+		self.true = False # Defult to False
+		
 		self.fixedLine = self.removeDeclaration(self.fixLine(line))
 		self.lines = list()
 		self.comp = list()
@@ -46,17 +50,40 @@ class If:
 			else:
 				obj = interpretObj(fixedLine, self.sendError, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
 				if obj:
-					"""
 					if type(obj) == ElseIf:
-						# MAX FIX!!!!!!!!
-						# NOT IMPLEMENTED!!!!!
-						obj.setFixedLine(lastParent.line + "&&" + fixedLine)
-					"""
+						if type(lastParent) == If:
+							obj.setParent(lastParent)
+							obj.hasBeenConnectedToIf = True
+							self.comp.append(obj)
+							lastParent = obj
+						elif type(lastParent) == ElseIf and lastParent.hasBeenConnectedToIf:
+							obj.setParent(lastParent)
+							self.comp.append(obj)
+							lastParent = obj
+						else:
+							self.sendError(
+								f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+								f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.RED}]" +
+								f"{blcolors.RED}  INVALID ElseIf DEFINITION: \"{fixedLine}\", " + 
+								f"there isn't an if or else if statement to inherit from{blcolors.CLEAR}"
+							)
+			
 					# CASE FOR ELSE - Need to inherit value of the previous statement
-					if type(obj) == Else:
-						obj.setFixedLine(lastParent.line)
-					self.comp.append(obj)
-					lastParent = obj
+					elif type(obj) == Else:
+						if type(lastParent) == If or type(lastParent) == ElseIf:
+							obj.setParent(lastParent)
+							self.comp.append(obj)
+							lastParent = obj
+						else:
+							self.sendError(
+								f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+								f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.RED}]" +
+								f"{blcolors.RED}  INVALID ELSE DEFINITION: \"{fixedLine}\", " + 
+								f"there isn't an if or else if statement to inherit from{blcolors.CLEAR}"
+							)
+					else:
+						self.comp.append(obj)
+						lastParent = obj
 
 		# Loop Through all the parents that were created
 		for parent in parents:
@@ -69,8 +96,13 @@ class If:
 		editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback, self.sendError, returnOutputStr=False)
 
 		if editLine == "True":
+			self.true = True
 			for obj in self.comp:
 				obj.run(varAddCallback, varGetCallback, funcCallback)
+
+	
+	def isTrue(self):
+		return self.true
 
 	def addLine(self, line):
 		self.lines.append(line)

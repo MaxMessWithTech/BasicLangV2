@@ -42,7 +42,7 @@ def decInterp(line, getVars, errorCallback, returnSplitLine=False, returnOutputS
                 )
 
         # Checks for a number
-        elif splitLine[x].replace(" ", "").isnumeric():
+        elif splitLine[x].replace(" ", "").replace("-", "").isnumeric():
             if "numb" not in dataTypes and len(dataTypes) != 0 and valid:
                 valid = False
             dataTypes.append("numb")
@@ -85,7 +85,8 @@ def decInterp(line, getVars, errorCallback, returnSplitLine=False, returnOutputS
 
                 errorCallback(
                     f"{blcolors.RED}[{blcolors.BOLD}Declaration Interpreter{blcolors.CLEAR}{blcolors.RED}]" +
-                    f"{blcolors.RED}  Statement {repr(splitLine[x])} was detected as a var, but didn't exist or is invalid!{blcolors.CLEAR}"
+                    f"{blcolors.RED}  Statement {repr(splitLine[x])} [in line {repr(line)}] " + 
+                    f"was detected as a var, but didn't exist or is invalid!{blcolors.CLEAR}"
                 )
                 splitLine[x] = f"{blcolors.RED}[{blcolors.BOLD}ERROR{blcolors.CLEAR}{blcolors.RED}]{blcolors.CLEAR}"
 

@@ -29,6 +29,8 @@ class Draw:
                     f"{blcolors.CYAN}  Currently in terminal mode!{blcolors.CLEAR}"
                 )
                 return
+            
+            self.createPointArray()
             # If this is in a production env, then send draw command
             self.sendCommandCallback("draw", {
                 'x1': self.x1,
@@ -37,6 +39,65 @@ class Draw:
                 'y2': self.y2,
                 'color': self.color
             })
+    
+    def createPointArray(self):
+        out = list()
+
+        # x1 < x2 and y1< y2
+        if self.x1 < self.x2 and self.y1 < self.y2:
+            X1 = self.x1
+            X2 = self.x2
+            Y1 = self.y1
+            Y2 = self.y2
+        elif self.x1 > self.x2 and self.y1 > self.y2:
+            X1 = self.x2
+            X2 = self.x1
+            Y1 = self.y2
+            Y2 = self.y1
+        elif self.x1 == self.x2:
+            # Do straight vertical line HERE
+            for y in range(self.y1, self.y2):
+                out.append((self.x1, y))
+            return out
+        elif self.y1 == self.y2:
+            # Do straight horizontal line HERE
+            for x in range(self.x1, self.x2):
+                out.append((x, self.y1))
+            return out
+        else:
+            self.sendError(
+                f"{blcolors.RED}[{blcolors.BOLD}Draw{blcolors.CLEAR}{blcolors.RED}]" +
+                f"{blcolors.RED}  Invalid Draw Statement {repr(self.fixedLine)}{blcolors.CLEAR}"
+            )
+            return out
+        # calculate dx & dy
+        dx = X2 - X1
+        dy = Y2 - Y1
+    
+        # initial value of decision parameter d
+        d = dy - (dx/2)
+        x = X1
+        y = Y1
+    
+        # Plot initial given point
+        # print(f"({x}, {y})")
+        out.append((x, y))
+
+        while (x < X2):
+            x = x + 1
+            # E or East is chosen
+            if(d < 0):
+                d = d + dy
+    
+            # NE or North East is chosen
+            else:
+                d = d + (dy - dx)
+                y = y + 1
+
+            # Plot intermediate points
+            # print(f"({x}, {y})")
+            out.append((x, y))
+        return out
 
     @staticmethod
     def removeDeclaration(line):

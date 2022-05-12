@@ -1,7 +1,7 @@
 func:
 	print("Func")
 	delay(1 )
-	draw(0, 0, 100, 100, (255, 255, 255))
+	draw(0, 0, 100, -2, (255, 255, 255))
 
 	if(testVar + " Miller" == "Max Miller" && testVar != "Max" || "test" != "test"):
 		print("hello Max!!!!")

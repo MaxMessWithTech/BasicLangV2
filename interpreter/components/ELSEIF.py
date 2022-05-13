@@ -16,8 +16,6 @@ class ElseIf:
 		self.headless = headless
 		self.sendCommandCallback = sendCommandCallback
 
-		print("Create Else If")
-
 	def compile(self):
 		from interpreter.utils.interpretObj import interpretObj
 

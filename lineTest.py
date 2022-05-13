@@ -7,25 +7,44 @@ def midPoint(X1, Y1, X2, Y2, img):
 	d = dy - (dx/2)
 	x = X1
 	y = Y1
- 
-	# Plot initial given point
-	print(f"({x}, {y})")
-	img.put("#ffffff", (x, y))
 
-	while (x < X2):
-		x = x + 1
-		# E or East is chosen
-		if(d < 0):
-			d = d + dy
- 
-		# NE or North East is chosen
-		else:
-			d = d + (dy - dx)
-			y = y + 1
-
-		# Plot intermediate points
-		print(f"({x}, {y})")
+	if dy <= dx:
+		d = dy - (dx/2)
+		
+		# plot initial given point
 		img.put("#ffffff", (x, y))
+		
+		# iterate through value of X
+		while(x < X2):
+			x = x + 1
+
+			# 'E' is chosen
+			if d < 0:
+				d = d + dy
+			# 'NE' is chosen
+			else:
+				d = d + dy - dx
+				y = y+1
+			img.put("#ffffff", (x, y))
+
+	elif dx <= dy:
+		d = dx - (dy/2)
+		
+		# plot initial given point
+		img.put("#ffffff", (x, y))
+		
+		# iterate through value of X
+		while y < Y2:
+			y= y + 1
+
+			# 'E' is chosen
+			if d < 0:
+				d = d + dx
+			# 'NE' is chosen
+			else:
+				d = d + dx - dy
+				x= x+1
+			img.put("#ffffff", (x, y))
 	 
  
 # Driver program
@@ -42,9 +61,6 @@ if __name__=='__main__':
 	img = PhotoImage(width=WIDTH, height=HEIGHT)
 	canvas.create_image((WIDTH/2, HEIGHT/2), image=img, state="normal")
 
-	X1 = 0
-	Y1 = 0
-	X2 = WIDTH
-	Y2 = HEIGHT
-	midPoint(X1, Y1, X2, Y2, img)
+	midPoint(0, 0, 50, 100, img)
+	midPoint(0, 0, 50, 50, img)
 	window.mainloop()

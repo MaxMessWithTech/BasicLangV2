@@ -17,12 +17,10 @@ def splitByOpp(line) -> list:
     for opp in operatorList:
         res = [i for i in range(len(line)) if line.startswith(opp, i)]
         for index in res:
-            # Case for negative numbers
             try:
+                # Case for negative numbers
                 if (opp == "-" and not line[index+1].isnumeric()) or opp != "-":
                     allIndices.append({'index': index, 'opp': opp})
-                else:
-                    print(f"Found Negative: {line}")
             except IndexError:
                 allIndices.append({'index': index, 'opp': opp})
     

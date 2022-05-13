@@ -1,7 +1,8 @@
 from interpreter.components.ELSE import Else
 from interpreter.components.print import Print
 from interpreter.components.delay import Delay
-from interpreter.components.draw import Draw
+from interpreter.components.drawLine import DrawLine
+from interpreter.components.drawCircle import DrawCircle
 from interpreter.components.functionCall import FunctionCall
 from interpreter.components.var import Var
 from interpreter.components.IF import If
@@ -10,8 +11,8 @@ from interpreter.utils.blcolors import blcolors
 
 # This is a list, it does things, don't question it future Max
 # "()" is for functions
-typesOfObjects = ["print", "delay", "draw", "else if", "if", "else", "()", "="]
-objects = [Print, Delay, Draw, ElseIf, If, Else, FunctionCall, Var]
+typesOfObjects = ["print", "delay", "drawLine", "drawCircle", "else if", "if", "else", "()", "="]
+objects = [Print, Delay, DrawLine, DrawCircle, ElseIf, If, Else, FunctionCall, Var]
 
 
 # PURPOSE - This is gonna figure out which object should be created 

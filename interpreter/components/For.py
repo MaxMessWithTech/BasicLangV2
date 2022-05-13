@@ -111,7 +111,7 @@ class For:
 
 	@staticmethod
 	def removeDeclaration(line):
-		return line.replace('if(', "").replace(')', "")
+		return line.replace('for(', "").replace(')', "")
 
 	@staticmethod
 	def fixLine(line):
@@ -122,9 +122,9 @@ class For:
 		if not self.headless:
 			if self.sendCommandCallback:
 				self.sendCommandCallback("debug",
-										 f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-										 f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
-										 f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+					f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+					f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+					f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
 			else:
 				print(
 					f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +

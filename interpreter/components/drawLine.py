@@ -7,6 +7,8 @@ from interpreter.utils.blcolors import blcolors
 # draw(x1, y1, x2, y2, color)
 # draw(0, 0, 100, 100, (255, 255, 255))
 class DrawLine:
+	_decloration = "draw.drawLine("
+
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		self.fixedLine = self.removeDeclaration(self.fixLine(line))
@@ -123,16 +125,15 @@ class DrawLine:
 					x= x+1
 				out.append({'x': x, 'y': y})
 		return out
-
-	@staticmethod
-	def removeDeclaration(line):
+	
+	def removeDeclaration(self, line):
 		# THIS IS GONNA BECOME A PROBLEM, 
 		# BUT I DON'T WANNA ADDRESS IT EVERYWHERE (Even though it's broken everywhere)
 		for x in range(len(line)):
 			if line[::-1][x] == ")":
 				break
 
-		return line[:len(line)-x-1].replace('drawLine(', "")
+		return line[:len(line)-x-1].replace(self._decloration, "")
 	
 	def setVars(self, line) -> bool:
 		split = line.split("\r\n")

@@ -11,7 +11,7 @@ from interpreter.utils.blcolors import blcolors
 
 # This is a list, it does things, don't question it future Max
 # "()" is for functions
-typesOfObjects = ["print", "delay", "drawLine", "drawCircle", "else if", "if", "else", "()", "="]
+typesOfObjects = ["print", "delay", DrawLine._decloration, DrawCircle._decloration, "else if", "if", "else", "()", "="]
 objects = [Print, Delay, DrawLine, DrawCircle, ElseIf, If, Else, FunctionCall, Var]
 
 

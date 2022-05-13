@@ -3,10 +3,9 @@ from os.path import exists
 from interpreter.utils.blcolors import blcolors
 from interpreter import main
 
-from tkinter import Tk, Canvas, PhotoImage, mainloop
-from math import sin
+from tkinter import Tk, Canvas, PhotoImage
 
-WIDTH, HEIGHT = 640, 480
+WIDTH, HEIGHT = 512, 512
 
 window = Tk()
 canvas = Canvas(window, width=WIDTH, height=HEIGHT, bg="#000000")

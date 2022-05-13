@@ -1,9 +1,10 @@
 func:
 	print("Func")
 	delay(1 )
-	drawLine(200, 300, 200, 100, (255, 255, 255))
-	drawLine(100, 200, 300, 200, (255, 255, 255))
-	drawCircle(200, 200, 100, (255, 255, 255))
+	draw.drawLine(256, 356, 256, 156, (255, 255, 255))
+	draw.drawLine(156, 256, 356, 256, (255, 255, 255))
+	draw.drawCircle(256, 256, 100, (0, 255, 255))
+	draw.drawCircle(256, 256, 100, (0, 255, 255))
 
 	if(testVar + " Miller" == "Max Miller" && testVar != "Max" || "test" != "test"):
 		print("hello Max!!!!")

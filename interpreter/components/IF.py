@@ -63,7 +63,7 @@ class If:
 						else:
 							self.sendError(
 								f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-								f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.RED}]" +
+								f"IF ({self.fixedLine}){blcolors.CLEAR}{blcolors.RED}]" +
 								f"{blcolors.RED}  INVALID ElseIf DEFINITION: \"{fixedLine}\", " + 
 								f"there isn't an if or else if statement to inherit from{blcolors.CLEAR}"
 							)
@@ -77,7 +77,7 @@ class If:
 						else:
 							self.sendError(
 								f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-								f"FUNCTION ({self.name}){blcolors.CLEAR}{blcolors.RED}]" +
+								f"IF ({self.fixedLine}){blcolors.CLEAR}{blcolors.RED}]" +
 								f"{blcolors.RED}  INVALID ELSE DEFINITION: \"{fixedLine}\", " + 
 								f"there isn't an if or else if statement to inherit from{blcolors.CLEAR}"
 							)

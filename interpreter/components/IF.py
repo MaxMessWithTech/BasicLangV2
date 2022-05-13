@@ -5,6 +5,8 @@ from interpreter.utils.blcolors import blcolors
 
 
 class If:
+	_decloration = "if("
+
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		# New Handeling method
@@ -111,9 +113,12 @@ class If:
 	def getIndent(line):
 		return line.count("\t")
 
-	@staticmethod
-	def removeDeclaration(line):
-		return line.replace('if(', "").replace(')', "")
+	def removeDeclaration(self, line):
+		for x in range(len(line)):
+			if line[::-1][x] == ")":
+				break
+
+		return line[:len(line)-x-1].replace(self._decloration, "")
 
 	@staticmethod
 	def fixLine(line):
@@ -124,9 +129,9 @@ class If:
 		if not self.headless:
 			if self.sendCommandCallback:
 				self.sendCommandCallback("debug",
-										 f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-										 f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
-										 f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+					f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+					f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+					f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
 			else:
 				print(
 					f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +

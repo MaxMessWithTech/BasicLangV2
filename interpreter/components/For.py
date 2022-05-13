@@ -3,6 +3,8 @@ from interpreter.utils.blcolors import blcolors
 
 
 class For:
+	_decloration = "for("
+
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		
@@ -109,9 +111,12 @@ class For:
 	def getIndent(line):
 		return line.count("\t")
 
-	@staticmethod
-	def removeDeclaration(line):
-		return line.replace('for(', "").replace(')', "")
+	def removeDeclaration(self, line):
+		for x in range(len(line)):
+			if line[::-1][x] == ")":
+				break
+
+		return line[:len(line)-x-1].replace(self._decloration, "")
 
 	@staticmethod
 	def fixLine(line):

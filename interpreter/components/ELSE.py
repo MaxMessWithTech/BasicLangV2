@@ -2,6 +2,8 @@ from interpreter.utils.decInterp import decInterp
 from interpreter.utils.blcolors import blcolors
 
 class Else:
+	_decloration = "if(" # We use if as it will be inheriting from an if statement
+
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		# New Handeling method
@@ -121,9 +123,12 @@ class Else:
 	def getIndent(line):
 		return line.count("\t")
 
-	@staticmethod
-	def removeDeclaration(line):
-		return line.replace('if(', "").replace(')', "")
+	def removeDeclaration(self, line):
+		for x in range(len(line)):
+			if line[::-1][x] == ")":
+				break
+
+		return line[:len(line)-x-1].replace(self._decloration, "")
 
 	@staticmethod
 	def fixLine(line):

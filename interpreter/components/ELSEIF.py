@@ -3,6 +3,8 @@ from interpreter.utils.blcolors import blcolors
 
 
 class ElseIf:
+	_decloration = "else if(" # Currently requires ONLY ONE SPACE
+
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		# New Handeling method
@@ -126,10 +128,12 @@ class ElseIf:
 	def getIndent(line):
 		return line.count("\t")
 
-	@staticmethod
-	def removeDeclaration(line):
-		# CURRENTLY REQUIRES ONE SPACE
-		return line.replace("else if(", "").replace(')', "")
+	def removeDeclaration(self, line):
+		for x in range(len(line)):
+			if line[::-1][x] == ")":
+				break
+
+		return line[:len(line)-x-1].replace(self._decloration, "")
 
 	@staticmethod
 	def fixLine(line):

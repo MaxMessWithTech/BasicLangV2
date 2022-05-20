@@ -91,9 +91,12 @@ class For:
 
 	# This is called during runtime
 	def run(self, varAddCallback, varGetCallback, funcCallback):
-		# CHECK IF TRUE
-		# editLine should return either "True" or "False"
-		editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback, self.sendError, returnOutputStr=False)
+
+		editLine, dataTypes, valid = decInterp(
+			self.fixedLine, varGetCallback, self.sendError, 
+			returnSplitLine=True, createVarCallback=varAddCallback
+		)
+		print(repr(editLine))
 
 		if editLine == "True":
 			self.true = True

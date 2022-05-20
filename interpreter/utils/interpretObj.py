@@ -1,18 +1,32 @@
-from interpreter.components.ELSE import Else
 from interpreter.components.print import Print
 from interpreter.components.delay import Delay
 from interpreter.components.drawLine import DrawLine
 from interpreter.components.drawCircle import DrawCircle
+
 from interpreter.components.functionCall import FunctionCall
 from interpreter.components.var import Var
+from interpreter.components.FOR import For
+
 from interpreter.components.IF import If
 from interpreter.components.ELSEIF import ElseIf
+from interpreter.components.ELSE import Else
 from interpreter.utils.blcolors import blcolors
 
 # This is a list, it does things, don't question it future Max
 # "()" is for functions
-typesOfObjects = ["print", "delay", DrawLine._decloration, DrawCircle._decloration, "else if", "if", "else", "()", "="]
-objects = [Print, Delay, DrawLine, DrawCircle, ElseIf, If, Else, FunctionCall, Var]
+objects = [
+    Print, # print() 
+    Delay, # delay()
+    DrawLine, # draw.drawLine()
+    DrawCircle, # draw.drawCircle()
+    For,
+    ElseIf, # else if()
+    If, # if()
+    Else, # else
+    FunctionCall, # ()
+    Var # =
+] 
+typesOfObjects = [x._decloration for x in objects]
 
 
 # PURPOSE - This is gonna figure out which object should be created 

@@ -3,6 +3,8 @@ from interpreter.utils.blcolors import blcolors
 
 
 class Var:
+    _decloration = "="
+
     def __init__(self, line, headless=False, sendCommandCallback=None):
         self.line = line
         self.name = ""

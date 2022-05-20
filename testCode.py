@@ -39,8 +39,8 @@ def testCallback(cmd, data, **kwargs):
         else:
             for x in range(len(data['cords'])):
                 data['cords'][x] = (data['cords'][x]['x'], data['cords'][x]['y'])
-            if len(data['cords']) > 10:
-                data['cords'] = data['cords'][0:10]
+            if len(data['cords']) > 3:
+                data['cords'] = data['cords'][0:3]
                 print(f"{blcolors.YELLOW}[{cmd}]: {data} {blcolors.MAGENTA}SHORTENED{blcolors.CLEAR}")
             else: 
                 print(f"{blcolors.YELLOW}[{cmd}]: {data}{blcolors.CLEAR}")

@@ -2,7 +2,7 @@ from interpreter.utils.decInterp import decInterp
 from interpreter.utils.blcolors import blcolors
 
 class Else:
-	_decloration = "if(" # We use if as it will be inheriting from an if statement
+	_decloration = "else" # We use if as it will be inheriting from an if statement
 
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line

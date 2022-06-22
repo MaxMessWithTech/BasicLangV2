@@ -33,7 +33,7 @@ def testCallback(cmd, data, **kwargs):
             for cord in data['cords']:
                 # print(cord)
                 img.put(
-                    rgb_to_hex((data['color']['r'], data['color']['g'], data['color']['b'])), 
+                    rgb_to_hex((data['color']['r'], data['color']['g'], data['color']['b'])),
                     (cord['x'], cord['y'])
                 )
         else:
@@ -42,10 +42,10 @@ def testCallback(cmd, data, **kwargs):
             if len(data['cords']) > 3:
                 data['cords'] = data['cords'][0:3]
                 print(f"{blcolors.YELLOW}[{cmd}]: {data} {blcolors.MAGENTA}SHORTENED{blcolors.CLEAR}")
-            else: 
+            else:
                 print(f"{blcolors.YELLOW}[{cmd}]: {data}{blcolors.CLEAR}")
     else:
-        print(f"{blcolors.YELLOW}{blcolors.BOLD}[Callback]{blcolors.CLEAR}" + 
+        print(f"{blcolors.YELLOW}{blcolors.BOLD}[Callback]{blcolors.CLEAR}" +
             f"{blcolors.YELLOW} [{cmd}]: {repr(data)}{blcolors.CLEAR}")
 
 if __name__ == "__main__":
@@ -64,4 +64,3 @@ if __name__ == "__main__":
             window.mainloop()
     else:
         print(f"{blcolors.RED}Invalid filename: {repr(fileName)}{blcolors.CLEAR}")
-

@@ -17,7 +17,7 @@ class Var:
         if "=" in rawVal:
             self.sendError(f"{blcolors.RED}[{blcolors.BOLD}Declaration Interpreter (Var){blcolors.CLEAR}{blcolors.RED}]" +
                 f"{blcolors.RED}  INVALID VARIABLE DECLORATION: {repr(self.line)}{blcolors.CLEAR}")
-        self.value = decInterp(rawVal, varGetCallback, self.sendError)[0]
+        self.value = decInterp(rawVal, varGetCallback, self.sendError)[0][0]
         # print(f"name: {self.name}, value: {self.value}")
         varAddCallback(self)
 

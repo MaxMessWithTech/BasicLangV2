@@ -3,6 +3,7 @@ from interpreter.utils import decInterp
 from time import sleep
 from interpreter.utils.blcolors import blcolors
 
+
 class Delay:
 	_decloration = "delay("
 	
@@ -26,9 +27,9 @@ class Delay:
 		# This removes ALL quotation marks,
 		# if I eventually want to add support for \" then this will need to be changed
 		if self.sendCommandCallback:
-			self.sendCommandCallback("delay", editLine)
+			self.sendCommandCallback("delay", editLine[0])
 		else:
-			sleep(editLine)
+			sleep(editLine[0])
 
 	def removeDeclaration(self, line):
 		for x in range(len(line)):

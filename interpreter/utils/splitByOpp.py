@@ -28,7 +28,7 @@ def splitByOpp(line) -> list:
     lastIndex = -1
     for indexDict in sorted(allIndices, key=lambda d: d['index']):
         # Makes sure that when there are tuples we don't have weird gaps
-        if indexDict['opp'] != "(" and indexDict['opp'] != "[" :
+        if indexDict['opp'] != "(" and indexDict['opp'] != "[":
             out.append(line[lastIndex + 1:indexDict['index']])
         
         out.append(line[indexDict['index']:indexDict['index'] + len(indexDict['opp'])])

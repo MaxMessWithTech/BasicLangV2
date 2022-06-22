@@ -16,9 +16,9 @@ class Print:
 		# This removes ALL quotation marks,
 		# if I eventually want to add support for \" then this will need to be changed
 		if self.sendCommandCallback:
-			self.sendCommandCallback("log", editLine)
+			self.sendCommandCallback("log", editLine[0])
 		else:
-			print(editLine)
+			print(editLine[0])
 
 	def removeDeclaration(self, line):
 		for x in range(len(line)):

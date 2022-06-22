@@ -102,7 +102,7 @@ class ElseIf:
 			if not self.parent.isTrue():
 				editLine, dataTypes, valid = decInterp(self.fixedLine, varGetCallback, self.sendError, returnOutputStr=False)
 
-				if editLine == "True":
+				if editLine[0] is True:
 					self.true = True
 					for obj in self.comp:
 						obj.run(varAddCallback, varGetCallback, funcCallback)

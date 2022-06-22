@@ -94,7 +94,7 @@ class For:
 
 		editLine, dataTypes, valid = decInterp(
 			self.fixedLine, varGetCallback, self.sendError, 
-			returnSplitLine=True, createVarCallback=varAddCallback
+			returnSplitLine=False, createVarCallback=varAddCallback
 		)
 		print(repr(editLine))
 

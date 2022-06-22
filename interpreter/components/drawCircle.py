@@ -122,16 +122,15 @@ class DrawCircle:
 
 		return line[:len(line)-x-1].replace(self._decloration, "")
 	
-	def setVars(self, line) -> bool:
-		split = line.split("\r\n")
+	def setVars(self, split) -> bool:
 
 		# Should Look like: 
 		# ['', x, ',', y, ',', r, ',', '(', red, ',', green, ',', blue, ')']
-		if len(split) == 14:
-			self.x = int(split[1])
-			self.y = int(split[3])
-			self.r = int(split[5])
-			self.color = {'r': int(split[8]), 'g': int(split[10]), 'b': int(split[12])}
+		if len(split) == 4:
+			self.x = int(split[0])
+			self.y = int(split[1])
+			self.r = int(split[2])
+			self.color = {'r': int(split[3][0]), 'g': int(split[3][1]), 'b': int(split[3][2])}
 			# print(f"({self.x1}, {self.y1}), ({self.x2}, {self.y2}) -> {self.color}")
 		else:
 			self.sendError(f"{blcolors.RED}[{blcolors.BOLD}Draw Circle{blcolors.CLEAR}{blcolors.RED}]" +

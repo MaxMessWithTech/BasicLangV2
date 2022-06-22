@@ -136,16 +136,15 @@ class DrawLine:
 		return line[:len(line)-x-1].replace(self._decloration, "")
 	
 	def setVars(self, line) -> bool:
-		split = line.split("\r\n")
 
 		# Should Look like: 
 		# ['', x1, ',', y1, ',', x2, ',', y2, ',', '(', red, ',', green, ',', blue, ')']
-		if len(split) == 16:
-			self.x1 = int(split[1])
-			self.y1 = int(split[3])
-			self.x2 = int(split[5])
-			self.y2 = int(split[7])
-			self.color = {'r': int(split[10]), 'g': int(split[12]), 'b': int(split[14])}
+		if len(line) == 5:
+			self.x1 = int(line[0])
+			self.y1 = int(line[1])
+			self.x2 = int(line[2])
+			self.y2 = int(line[3])
+			self.color = {'r': int(line[4][0]), 'g': int(line[4][1]), 'b': int(line[4][2])}
 			# print(f"({self.x1}, {self.y1}), ({self.x2}, {self.y2}) -> {self.color}")
 		else:
 			self.sendError(f"{blcolors.RED}[{blcolors.BOLD}Draw Line{blcolors.CLEAR}{blcolors.RED}]" +

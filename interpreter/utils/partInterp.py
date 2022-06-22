@@ -10,7 +10,7 @@ from interpreter.utils.trueFalse import trueFalse
 
 
 def partInterp(
-		line, getVars, errorCallback, returnSplitLine=False, returnOutputStr=True, createVarCallback=None
+		line, getVars, errorCallback, returnOutputStr=True, createVarCallback=None
 ) -> Tuple[any, list, bool]:
 	"""
 	--Part Interpreter--
@@ -126,13 +126,8 @@ def partInterp(
 	output = ""
 	# print("SplitLine: ", splitLine)
 
-	# Check if we need to rebuild string
-	if valid and returnSplitLine:
-		for line in splitLine:
-			output = output + "\r\n" + line
-
 	# If it's a number, keep the operators
-	elif valid and "numb" in dataTypes:
+	if valid and "numb" in dataTypes:
 		output = ""
 		for line in splitLine:
 			output = output + line
@@ -182,7 +177,7 @@ def partInterp(
 		output = splitLine
 		# print(f"Output: {output}")
 	else:
-		print(splitLine)
+		# print(splitLine)
 		output = ""
 		for line in splitLine:
 			output = output + line

@@ -1,5 +1,6 @@
 from interpreter.utils.blcolors import blcolors
 
+
 def splitByArg(line: str, errorCallback) -> list:
 	"""
 	--Split By Argument--

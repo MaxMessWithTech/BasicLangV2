@@ -93,10 +93,9 @@ class For:
 	def run(self, varAddCallback, varGetCallback, funcCallback):
 
 		editLine, dataTypes, valid = decInterp(
-			self.fixedLine, varGetCallback, self.sendError, 
-			returnSplitLine=False, createVarCallback=varAddCallback
+			self.fixedLine, varGetCallback, self.sendError, createVarCallback=varAddCallback, splitByFirst=["in"]
 		)
-		print(repr(editLine))
+		print(f"[For] editLine: {repr(editLine)}")
 
 		if editLine == "True":
 			self.true = True

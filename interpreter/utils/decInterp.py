@@ -3,10 +3,12 @@ from typing import Tuple
 from interpreter.utils.blcolors import blcolors
 from interpreter.utils.splitByArg import splitByArg
 from interpreter.utils.partInterp import partInterp
+from interpreter.utils.splitByCustom import splitByCustom
+from interpreter.utils.customListToStr import customListToStr
 
 
 def decInterp(
-		line, getVars, errorCallback, returnSplitLine=False, returnOutputStr=True, createVarCallback=None, parent=True
+		line, getVars, errorCallback, returnOutputStr=True, createVarCallback=None, parent=True, splitByFirst=None
 ) -> Tuple[list, list, bool]:
 	"""
 	--Declaration Interpreter--
@@ -24,15 +26,18 @@ def decInterp(
 	5) for each -> decInterp() recall, check if ( or [
 	"""
 
-	# Split by argument
+	# This splits by a custom list of chars first, specifically in the case of for statement
+	if type(splitByFirst) == list:
+		line = customListToStr(splitByCustom(line, splitByFirst))
 
 	split = splitByArg(line, errorCallback)
+
 	if len(split) > 1:
 		valid = True
 		types = list()
 		for x in range(len(split)):
 			_out, _types, _valid = decInterp(
-				split[x], getVars, errorCallback, returnSplitLine=returnSplitLine,
+				split[x], getVars, errorCallback,
 				returnOutputStr=returnOutputStr, createVarCallback=createVarCallback, parent=False
 			)
 			split[x] = _out[0]
@@ -50,11 +55,10 @@ def decInterp(
 		# print(f"Found part: {part}")
 
 		_out, _types, _valid = partInterp(
-			part, getVars, errorCallback, returnSplitLine=returnSplitLine,
+			part, getVars, errorCallback,
 			returnOutputStr=returnOutputStr, createVarCallback=createVarCallback
 		)
 
 		part = _out
-		# print(f"Out: {_out}, type: {type(_out)}")
 
 		return [part], _types, _valid

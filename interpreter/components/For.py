@@ -1,3 +1,4 @@
+from interpreter.components.var import Var
 from interpreter.utils.decInterp import decInterp
 from interpreter.utils.blcolors import blcolors
 
@@ -7,7 +8,7 @@ class For:
 
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
-		
+
 		self.fixedLine = self.removeDeclaration(self.fixLine(line))
 		self.lines = list()
 		self.comp = list()
@@ -64,10 +65,10 @@ class For:
 							self.sendError(
 								f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
 								f"For ({self.fixedLine}){blcolors.CLEAR}{blcolors.RED}]" +
-								f"{blcolors.RED}  INVALID ElseIf DEFINITION: \"{fixedLine}\", " + 
+								f"{blcolors.RED}  INVALID ElseIf DEFINITION: \"{fixedLine}\", " +
 								f"there isn't an if or else if statement to inherit from{blcolors.CLEAR}"
 							)
-			
+
 					# CASE FOR ELSE - Need to inherit value of the previous statement
 					elif type(obj) == Else:
 						if type(lastParent) == If or type(lastParent) == ElseIf:
@@ -78,7 +79,7 @@ class For:
 							self.sendError(
 								f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
 								f"For ({self.fixedLine}){blcolors.CLEAR}{blcolors.RED}]" +
-								f"{blcolors.RED}  INVALID ELSE DEFINITION: \"{fixedLine}\", " + 
+								f"{blcolors.RED}  INVALID ELSE DEFINITION: \"{fixedLine}\", " +
 								f"there isn't an if or else if statement to inherit from{blcolors.CLEAR}"
 							)
 					else:
@@ -97,14 +98,15 @@ class For:
 		)
 		print(f"[For] editLine: {repr(editLine)}")
 
-		if editLine == "True":
-			self.true = True
+		if self.validate(editLine):
+
 			for obj in self.comp:
 				obj.run(varAddCallback, varGetCallback, funcCallback)
-
-	
-	def isTrue(self):
-		return self.true
+		else:
+			self.sendError(
+				f"{blcolors.RED}[{blcolors.BOLD}For{blcolors.CLEAR}{blcolors.RED}]" +
+				f"{blcolors.RED}  Invalid For Loop Declaration {repr(self.fixedLine)}{blcolors.CLEAR}"
+			)
 
 	def addLine(self, line):
 		self.lines.append(line)
@@ -118,7 +120,7 @@ class For:
 			if line[::-1][x] == ")":
 				break
 
-		return line[:len(line)-x-1].replace(self._decloration, "")
+		return line[:len(line) - x - 1].replace(self._decloration, "")
 
 	@staticmethod
 	def fixLine(line):
@@ -129,9 +131,9 @@ class For:
 		if not self.headless:
 			if self.sendCommandCallback:
 				self.sendCommandCallback("debug",
-					f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
-					f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
-					f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
+				                         f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
+				                         f"IF STATEMENT ({self.fixedLine}){blcolors.CLEAR}{blcolors.BLUE}]" +
+				                         f"{blcolors.BLUE}  {text}{blcolors.CLEAR}")
 			else:
 				print(
 					f"{blcolors.BLUE}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" +
@@ -144,3 +146,17 @@ class For:
 			self.sendCommandCallback("error", msg)
 		else:
 			print(msg)
+
+	def validate(self, splitLine) -> bool:
+		try:
+			if len(splitLine) != 3:
+				return False
+			if type(splitLine[0][0]) != Var:
+				return False
+			if splitLine[1][0] != "in":
+				return False
+			if type(splitLine[2]) != list:
+				return False
+			return True
+		except:
+			return False

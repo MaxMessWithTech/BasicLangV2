@@ -19,7 +19,7 @@ class DrawCircle:
 
 	# This is called during runtime
 	def run(self, varAddCallback, varGetCallback, funcCallback):
-		editLine, dataTypes, valid = decInterp.decInterp(self.fixedLine, varGetCallback, self.sendError, returnSplitLine=True)
+		editLine, dataTypes, valid = decInterp.decInterp(self.fixedLine, varGetCallback, self.sendError)
 		if self.setVars(editLine):
 			# Check to see if we can even do anything
 			if not self.sendCommandCallback:

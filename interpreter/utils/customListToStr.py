@@ -6,12 +6,13 @@ def customListToStr(_list: list) -> str:
 	as it needs a for loop to be converted into something
 	that looks like multiple args to the Decloration Interpreter
 	"""
-	string = "("
+	# string = "("
+	string = ""
 	for x in _list:
 		if len(string) > 1:
 			string = f"{string}, {x}"
 		else:
 			string = string + x
-	string = string + ")"
+	# string = string + ")"
 
 	return string

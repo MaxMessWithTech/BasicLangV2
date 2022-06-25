@@ -57,6 +57,14 @@ def partInterp(
 
 			splitLine[x] = splitLine[x].replace(" ", "")
 
+		# Checks if it's just the "in" operator, if so, don't try to create a var
+		elif splitLine[x].replace(" ", "") == "in":
+			if "operator" not in dataTypes and len(dataTypes) != 0 and valid:
+				valid = False
+
+			splitLine[x] = "in"
+			dataTypes.append("operator")
+
 		# Checks for a var
 		elif splitLine[x] not in operatorList and "\x1b[31m[\x1b[1mERROR\x1b[0m\x1b[31m]\x1b[0m" not in splitLine[x]:
 
@@ -64,7 +72,6 @@ def partInterp(
 			# THIS IS SUPER INEFFICIENT - IF THINGS ARE SLOW, THIS IS PROBABLY A PROBLEM
 			for var in varList:
 				if var.name == splitLine[x]:
-
 					# Since type() gives a weird string, this converts it
 					if type(var.value) is str:
 						splitLine[x] = f"\"{var.value}\""
@@ -85,9 +92,15 @@ def partInterp(
 				# !!ERROR!! VAR DOESN'T EXIST
 				if createVarCallback:
 					from interpreter.components.var import Var
+					# print(splitLine[x])
 
 					var = Var(f"{splitLine[x]} = 0")
 					createVarCallback(var)
+					# This will create the var and make sure it sets it's internal values
+					var.run(createVarCallback, getVars, None)
+
+					splitLine[x] = var
+					dataTypes.append("var")
 				else:
 
 					valid = False
@@ -173,9 +186,19 @@ def partInterp(
 			output = output.replace('"', "")
 			output = '"' + output + '"'
 
+	# If it's a list then just pass it on
 	elif valid and "list" in dataTypes:
 		output = splitLine
-		# print(f"Output: {output}")
+
+	# If it's a var then just pass it on
+	elif valid and "var" in dataTypes:
+		output = splitLine
+
+	# If it's just "in" then it's likely a for loop, pass it on
+	elif valid and "in" in splitLine:
+		output = splitLine
+
+	# Just concatenate it, as it likely has an Error
 	else:
 		# print(splitLine)
 		output = ""

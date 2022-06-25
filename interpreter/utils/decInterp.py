@@ -26,11 +26,14 @@ def decInterp(
 	5) for each -> decInterp() recall, check if ( or [
 	"""
 
+	# print(f"PRE PRE LINE: {line}")
 	# This splits by a custom list of chars first, specifically in the case of for statement
 	if type(splitByFirst) == list:
 		line = customListToStr(splitByCustom(line, splitByFirst))
+	# print(f"PRE LINE: {line}")
 
-	split = splitByArg(line, errorCallback)
+	split = splitByArg(line, errorCallback)  # "1" -> ["1"]  |  ['1', '2']
+	# print(f"Split: {split}")
 
 	if len(split) > 1:
 		valid = True
@@ -45,20 +48,27 @@ def decInterp(
 
 			if not _valid:
 				valid = False
-		print(f"Finalized Split: {split}, valid: {valid}")
+		# print(f"Line: {line}")
+		if line.replace(" ", "")[0] == "[":
+			split = [split]
+
+		# print(f"Finalized Split: {split}, valid: {valid}")
 		if not parent:
 			return [split], types, valid
+
+		# Case for lists, so they stay when they get to the object
 		return split, types, valid
 
 	else:
-		part = split[0]
+		part = split[0]  # ["1"] -> "1"
 		# print(f"Found part: {part}")
 
 		_out, _types, _valid = partInterp(
 			part, getVars, errorCallback,
 			returnOutputStr=returnOutputStr, createVarCallback=createVarCallback
-		)
+		)  # "1" -> 1
 
 		part = _out
 
+		# 1 -> [1]
 		return [part], _types, _valid

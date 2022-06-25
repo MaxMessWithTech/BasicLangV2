@@ -143,7 +143,7 @@ def partInterp(
 	if valid and "numb" in dataTypes:
 		output = ""
 		for line in splitLine:
-			output = output + line
+			output = output + str(line)
 
 		output = stringToMath(output, errorCallback)
 

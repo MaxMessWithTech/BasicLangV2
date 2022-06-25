@@ -99,9 +99,13 @@ class For:
 		print(f"[For] editLine: {repr(editLine)}")
 
 		if self.validate(editLine):
+			loopVar = editLine[0][0]
+			loopBy = editLine[2][0]
+			for proxy in loopBy:
+				loopVar.setValue(str(proxy), varGetCallback)
 
-			for obj in self.comp:
-				obj.run(varAddCallback, varGetCallback, funcCallback)
+				for obj in self.comp:
+					obj.run(varAddCallback, varGetCallback, funcCallback)
 		else:
 			self.sendError(
 				f"{blcolors.RED}[{blcolors.BOLD}For{blcolors.CLEAR}{blcolors.RED}]" +

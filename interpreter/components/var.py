@@ -23,6 +23,9 @@ class Var:
         # print(f"name: {self.name}, value: {self.value}")
         varAddCallback(self)
 
+    def setValue(self, rawVal, varGetCallback):
+        self.value = decInterp(rawVal, varGetCallback, self.sendError)[0][0]
+
     def sendError(self, msg):
         if self.sendCommandCallback:
             self.sendCommandCallback("error", msg)

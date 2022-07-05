@@ -96,7 +96,7 @@ class For:
 		editLine, dataTypes, valid = decInterp(
 			self.fixedLine, varGetCallback, self.sendError, createVarCallback=varAddCallback, splitByFirst=["in"]
 		)
-		print(f"[For] editLine: {repr(editLine)}")
+		# print(f"[For] editLine: {repr(editLine)}")
 
 		if self.validate(editLine):
 			loopVar = editLine[0][0]

@@ -29,13 +29,14 @@ class Code:
             if indent == 0 and fixedLine.find(":") != -1:
                 if curFunc:
                     self.comp.append(curFunc)
+
                 name = fixedLine.replace(":", "")
                 if name == "run":
                     foundRun = True
                     curFunc = self.runFuncComp
                 else:
                     curFunc = Function(name, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
-                # self.printLn("IT'S A FUNCTION!!")
+                    self.printLn("IT'S A FUNCTION!!")
             elif indent != 0:
                 curFunc.addLine(line)
             self.printLn(f"Reading line: {self.fixLine(fixedLine)}, with an indent: {indent}.")
@@ -44,9 +45,9 @@ class Code:
             self.sendError(f"{blcolors.RED}[{blcolors.BOLD}COMPILER at {blcolors.UNDERLINE}" + 
                         f"BASE{blcolors.CLEAR}{blcolors.RED}]" +
                         f"{blcolors.RED}  RUN FUNCTION NEVER FOUND{blcolors.CLEAR}")
-
-        for func in self.comp:
-            func.compile()
+        else:
+            for func in self.comp:
+                func.compile()
 
     # PURPOSE: Run File
     def run(self):

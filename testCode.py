@@ -25,9 +25,10 @@ if display:
     def rgb_to_hex(rgb):
         return '#%02x%02x%02x' % rgb
 
+
 def testCallback(cmd, data, **kwargs):
     if cmd == "error" or cmd == "debug":
-            print(f"{blcolors.YELLOW}[{cmd}]: {data}{blcolors.CLEAR}")
+        print(f"{blcolors.YELLOW}[{cmd}]: {data}{blcolors.CLEAR}")
     elif cmd == "draw":
         if display:
             for cord in data['cords']:
@@ -47,6 +48,7 @@ def testCallback(cmd, data, **kwargs):
     else:
         print(f"{blcolors.YELLOW}{blcolors.BOLD}[Callback]{blcolors.CLEAR}" +
             f"{blcolors.YELLOW} [{cmd}]: {repr(data)}{blcolors.CLEAR}")
+
 
 if __name__ == "__main__":
     if sys.argv[1] == "help":

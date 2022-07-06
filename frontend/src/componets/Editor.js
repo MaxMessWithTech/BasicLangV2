@@ -3,6 +3,7 @@ import Canvas from './Canvas.js';
 import greenFlag from './greenFlag.svg';
 import redStop from './redStop.svg';
 import EditorCSS from './Editor.css';
+import Nav from './nav';
 
 import {
     ReflexContainer,
@@ -202,61 +203,69 @@ const Editor = (props) => {
     }
 
     return (
-        <ReflexContainer className="d-flex align-items-center justify-content-center fullSize" orientation="vertical" windowResizeAware={true}>
-            <ReflexElement className="d-flex align-items-center justify-content-center codeBox" minSize={window.innerWidth * 0.2} maxSize={window.innerWidth * 0.8}>
-                <textarea
-                    id="codeEditorTextField"
-                    className="codeEditorTextField"
-                    value={codeValue}
-                    onChange={e => setCodeValue(e.target.value)}
-                    onKeyDown={e => {
-                        // console.log(e)
-                        if (e.key === "Tab") { // tab was pressed
+        <div className="d-flex align-items-center justify-content-center flex-column editorWindow">
 
-                            // get caret position/selection
-                            const val = e.target.value,
-                                start = e.target.selectionStart,
-                                end = e.target.selectionEnd;
+            <ReflexContainer className="d-flex align-items-center justify-content-center editorWindow" orientation="vertical" windowResizeAware={true}>
+                <ReflexElement className="d-flex align-items-center justify-content-center codeBox" minSize={window.innerWidth * 0.2} maxSize={window.innerWidth * 0.8}>
+                    <textarea
+                        id="codeEditorTextField"
+                        className="codeEditorTextField"
+                        value={codeValue}
+                        onChange={e => setCodeValue(e.target.value)}
+                        onKeyDown={e => {
+                            // console.log(e)
+                            if (e.key === "Tab") { // tab was pressed
 
-                            // set textarea value to: text before caret + tab + text after caret
-                            e.target.value = val.substring(0, start) + '\t' + val.substring(end);
+                                // get caret position/selection
+                                const val = e.target.value,
+                                    start = e.target.selectionStart,
+                                    end = e.target.selectionEnd;
 
-                            // put caret at right position again
-                            e.target.selectionStart = e.target.selectionEnd = start + 1;
+                                // set textarea value to: text before caret + tab + text after caret
+                                e.target.value = val.substring(0, start) + '\t' + val.substring(end);
 
-                            // prevent the focus lose
-                            e.preventDefault();
-                            return false;
+                                // put caret at right position again
+                                e.target.selectionStart = e.target.selectionEnd = start + 1;
 
-                        }
-                    }}
-                    autoCapitalize="none"
-                    autoComplete="none"
-                    autoCorrect="none"
-                    data-gramm_editor="false"
-                    autoFocus
-                />
-            </ReflexElement>
-            <ReflexSplitter/>
-            <ReflexElement className="d-flex flex-column align-items-center justify-content-center sideBox" flex={0.2}>
-                <div className="p-2 d-flex align-items-center justify-content-between controls" id="sideBoxControls">
-                    <button className="runBtnBtn"><img id="RunBtn" className="runBtn" onClick={sendCode} src={greenFlag} alt={"Run"}/></button>
-                    <img id="StopBtn" className="runBtn" onClick={sendStop} src={redStop} alt={"Stop"}/>
-                </div>
-                <div className="d-flex align-items-center justify-content-center customNav">
-                    <div className="btn-group marginNav" role="group" aria-label="Third group">
-                        <button type="button" className={navValue === 0 ? "btn btn-primary" : "btn btn-secondary"} onClick={(e) => setNavValueWithUpdate(0)}>Log</button>
+                                // prevent the focus lose
+                                e.preventDefault();
+                                return false;
+
+                            }
+                        }}
+                        autoCapitalize="none"
+                        autoComplete="none"
+                        autoCorrect="none"
+                        data-gramm_editor="false"
+                        autoFocus
+                    />
+                </ReflexElement>
+                <ReflexSplitter/>
+                <ReflexElement className="d-flex flex-column align-items-center justify-content-center sideBox" flex={0.2}>
+                    <div className="p-2 d-flex align-items-center justify-content-between controls">
+
+                        <div className="p-2 d-flex align-items-center justify-content-center">
+                            <button className="runBtnBtn"><img id="RunBtn" className="runBtn" onClick={sendCode} src={greenFlag} alt={"Run"}/></button>
+                            <button className="runBtnBtn"><img id="StopBtn" className="runBtn" onClick={sendStop} src={redStop} alt={"Stop"}/></button>
+                        </div>
+
+                        <div className="p-2 d-flex align-items-center justify-content-between">
+                            <div className="btn-group marginNav " role="group" aria-label="Third group">
+                                <button type="button" className={navValue === 0 ? "btn btn-primary" : "btn btn-secondary"} onClick={(e) => setNavValueWithUpdate(0)}>Log</button>
+                            </div>
+                            <div className="btn-group marginNav selectBtn" role="group" aria-label="Third group">
+                                <button type="button" className={navValue === 1 ? "btn btn-primary" : "btn btn-secondary"} onClick={(e) => setNavValueWithUpdate(1)}>Output</button>
+                            </div>
+                        </div>
+
                     </div>
-                    <div className="btn-group marginNav" role="group" aria-label="Third group">
-                        <button type="button" className={navValue === 1 ? "btn btn-primary" : "btn btn-secondary"} onClick={(e) => setNavValueWithUpdate(1)}>Output</button>
+                    <div className="p-2 d-flex flex-column align-items-center justify-content-center" id="sideBoxLog">
+                        <p id="log" style={{display: navValue === 0 ? 'block' : 'none'}}> </p>
+                        <div id="canvas" style={{display: navValue === 0 ? 'none' : 'block'}}><Canvas draw={draw} socket={props.socket}/></div>
                     </div>
-                </div>
-                <div className="p-2 d-flex flex-column align-items-center justify-content-center" id="sideBoxLog">
-                    <p id="log" style={{display: navValue === 0 ? 'block' : 'none'}}> </p>
-                    <div id="canvas" style={{display: navValue === 0 ? 'none' : 'block'}}><Canvas draw={draw} socket={props.socket}/></div>
-                </div>
-            </ReflexElement>
-        </ReflexContainer>
+                </ReflexElement>
+            </ReflexContainer>
+        </div>
     );
 }
 

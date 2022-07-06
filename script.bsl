@@ -24,7 +24,7 @@ func:
 		# print("WEEE!")
 	# else:
 		# print("Hello... " + testVar)
-	
+
 run:
 	# print("Run")
 	testVar = "Max"

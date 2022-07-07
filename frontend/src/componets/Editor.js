@@ -13,6 +13,7 @@ import {
 
 import 'react-reflex/styles.css'
 import io from "socket.io-client";
+import axios from "axios";
 
 let Convert = require('ansi-to-html');
 let convert = new Convert();
@@ -20,7 +21,7 @@ let convert = new Convert();
 let firstUpdate = true;
 let currentLogValue = "";
 let isCtrl = false;
-let sKeyPress = false;
+let sentSave = false;
 let currentDrawIndex = 0;
 
 
@@ -31,6 +32,7 @@ const Editor = (props) => {
 
     const [clearDraw, setClearDraw] = useState(false);
     const [currentDrawValues, setCurrentDrawValues] = useState({});
+    const [curFile, setCurFile] = useState("");
 
     const socketRef = props.socket
 
@@ -91,7 +93,7 @@ const Editor = (props) => {
     }, []);
 
     const drawHandler = (message) => {
-        console.log("NEW Draw Command");
+        //console.log("NEW Draw Command");
         const data = JSON.parse(message);
 
         setCurrentDrawValues(oldArray => [...oldArray, {
@@ -141,7 +143,8 @@ const Editor = (props) => {
     }, []);
 
     const setCodeHandler = (message) => {
-        setCodeValue(message);
+        setCurFile(message['fileName']);
+        setCodeValue(message['data']);
     }
 
     useEffect(() => {
@@ -151,41 +154,47 @@ const Editor = (props) => {
         }
     }, []);
 
+    function pollServer() {
+        axios({
+			method: "POST",
+			url:"/refresh-token",
+			headers:{
+				Authorization: `Bearer ${props.refToken}`,
+			}
+		}).then((response) => {
+            if (response.status === 202) {
+                console.log(response.data.access_token)
+                console.log(response.data.access_token !== props.token)
+                props.setToken(response.data.access_token)
+            }
+
+		}).catch((error) => {
+			if (error.response) {
+				// console.log(error.response)
+				// console.log(error.response.status)
+				// console.log(error.response.headers)
+                props.removeToken();
+			}
+		})
+        setTimeout(()=> pollServer(), 1800000);
+    }
+
+    function sendSave() {
+        socketRef.emit("save", document.getElementById("codeEditorTextField").value);
+    }
+
     if (firstUpdate) {
         openWebsocket();
+        setTimeout(()=> pollServer(), 1000);
     }
 
-    const onKeyPress = (e) => {
-        if (e.key === "Meta") {
+    document.onkeydown = (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault();
-            isCtrl = true;
-        } else if (e.key === "Control") {
-            e.preventDefault();
-            isCtrl = true;
-        } else if (e.key === "s" && isCtrl && !sKeyPress){
-            sKeyPress = true;
-            e.preventDefault();
-
-            console.log("SAVE!!")
-
-            socketRef.emit("save", codeValue);
+            sendSave();
         }
     }
 
-    document.addEventListener('keydown', onKeyPress);
-    document.addEventListener('keyup', function(e){
-        if(e.key === "Meta" && isCtrl) {
-            e.preventDefault();
-            isCtrl = false;
-        } else if (e.key === "Control" && isCtrl) {
-            e.preventDefault();
-            isCtrl = false;
-        } else if (e.key === "s" && sKeyPress) {
-            sKeyPress = false;
-            console.log("S Key Up")
-            e.preventDefault();
-        }
-    });
 
 
     const draw = () => {
@@ -239,6 +248,7 @@ const Editor = (props) => {
                         data-gramm_editor="false"
                         autoFocus
                     />
+                    <div className="fileDisplay">{curFile}</div>
                 </ReflexElement>
                 <ReflexSplitter/>
                 <ReflexElement className="d-flex flex-column align-items-center justify-content-center sideBox" flex={0.2}>

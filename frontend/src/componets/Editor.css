@@ -95,3 +95,27 @@
     border-style: solid;
     border-width: 5px;
 }
+
+.fileDisplay {
+    position: absolute;
+    display: flex;
+    flex: auto;
+    bottom: 1vh;
+    right: 1vh;
+    height: 3vh;
+    margin: 0;
+    padding: 0.5rem;
+    align-items: center;
+    justify-content: center;
+
+    font-family: var(--mdb-font-roboto);
+    font-size: 1vw;
+
+    background-color: rgba(120, 120, 120, 0.2);
+
+
+    border-style: solid;
+    border-color: black;
+    border-width: 0.1rem;
+    border-radius: 0.5rem;
+}

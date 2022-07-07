@@ -1,6 +1,14 @@
 import React, { useRef, useEffect, useState} from 'react';
+import { TextField } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
 import './login.css'
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 const Login = (props) => {
 
@@ -16,7 +24,9 @@ const Login = (props) => {
 				password: password
 			}
 		}).then((response) => {
+			// console.log(response.data)
 			props.setToken(response.data.access_token);
+			props.setRefToken(response.data.refresh_token);
 			window.location.href = "/";
 		}).catch((error) => {
 			if (error.response) {
@@ -33,30 +43,31 @@ const Login = (props) => {
 	}
 
 	return(
-		<section className="gradient-custom">
+		<ThemeProvider theme={darkTheme}><section className="gradient-custom">
 			<div className="container py-5 h-100">
 				<div className="row d-flex justify-content-center align-items-center h-100">
 					<div className="col-12 col-md-8 col-lg-6 col-xl-5">
 						<div className="card bg-dark text-white" style={{borderRadius: '1rem'}}>
 							<div className="card-body p-5 text-center">
-
 								<div className="mb-md-5 mt-md-4 pb-5">
 
 									<h2 className="fw-bold mb-2 text-uppercase">Login</h2>
 									<p className="text-white-50 mb-5">Please enter your login and password!</p>
 
-									<div className="form-floating form-white mb-3 customInput">
-										<input type="email" className="form-control customInput" id="typeEmailX"
-										       placeholder="name@example.com" value={email} onChange={e => setEmail(e.target.value)}/>
-										<label htmlFor="typeEmailX">Email</label>
-									</div>
-
-									<div className="form-floating form-white mb-3 customInput">
-										<input type="password" id="typePasswordX"
-										       className="form-control form-control-lg customInput" placeholder="********"
-										       value={password} onChange={e => setPassword(e.target.value)}/>
-										<label htmlFor="typePasswordX">Password</label>
-									</div>
+									<TextField
+										className="mb-3 customInput"
+										value={email}
+										onChange={e => setEmail(e.target.value)}
+										label="Email"
+										variant="outlined"
+									/>
+									<TextField
+										className="mb-3 customInput"
+										value={password}
+										onChange={e => setPassword(e.target.value)}
+										label="Password"
+										type="password"
+									/>
 
 									<button className="btn btn-outline-light btn-lg px-5" type="submit" onClick={e => btnClick(e)}>Login</button>
 
@@ -71,7 +82,7 @@ const Login = (props) => {
 					</div>
 				</div>
 			</div>
-		</section>
+		</section></ThemeProvider>
 	);
 }
 

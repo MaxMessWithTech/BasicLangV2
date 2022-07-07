@@ -14,5 +14,6 @@
 }
 
 .customInput {
-    background: transparent !important;
+    width: 100%;
+    border-width: 0.125rem !important;
 }

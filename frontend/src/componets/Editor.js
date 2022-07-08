@@ -142,7 +142,8 @@ const Editor = (props) => {
     }, []);
 
     const setCodeHandler = (message) => {
-        console.log("Set Code!")
+        // console.log("Set Code!")
+        // console.log(message);
         props.saveFileName(message['fileName']);
         setCodeValue(message['data']);
     }

@@ -191,6 +191,35 @@ def get_user_files():
 	return jsonify(files), 200
 
 
+@app.route('/create-file', methods=["POST"])
+@jwt_required()
+def create_file():
+	current_user = get_jwt_identity()
+
+	user = User.query.filter_by(email=current_user).first()
+
+	fileName = request.json.get("fileName", None)
+
+	if not user:
+		return 'Token Error', 401
+	if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName))):
+		return 'File Already Exists', 400
+
+	if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id)))):
+		if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName))):
+			file = open(
+				os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "r")
+		else:
+			file = open(
+				os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w+")
+	else:
+		os.mkdir(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id))))
+		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w+")
+
+	# emit("setCode", {'data': file.read(), 'fileName': 'script.bsl'})
+	return "Created", 201
+
+
 @socketio.on('message')
 @jwt_required()
 def handle_message(message):
@@ -215,7 +244,6 @@ def handle_load(fileName):
 	else:
 		os.mkdir(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id))))
 		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w+")
-	print("Load!")
 
 	emit("setCode", {'data': file.read(), 'fileName': fileName})
 
@@ -232,17 +260,14 @@ def handle_save(code, fileName):
 	if not user:
 		return 'Token Error', 401
 	if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id)))):
-		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)),
-		            "w")
+		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w")
 		file.write(code)
 	else:
 		os.mkdir(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id))))
-		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)),
-		            "w")
+		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w")
 		file.write(code)
 
-
-# file.close()
+	# file.close()
 
 
 def execution_callback(cmd, data, **kwargs):

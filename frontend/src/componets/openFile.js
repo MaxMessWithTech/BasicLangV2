@@ -16,7 +16,7 @@ const OpenFile = (props) => {
 					Authorization: `Bearer ${props.token}`,
 				}
 			}).then((response) => {
-				console.log(response)
+				// console.log(response)
 				setFiles(response.data)
 
 			}).catch((error) => {
@@ -30,8 +30,9 @@ const OpenFile = (props) => {
 	}, [props.open]);
 
 	const openFileRequest = (value) => {
-		console.log("Open Value Command: " + value);
+		// console.log("Open Value Command: " + value);
 		props.socket.emit("load", value);
+		handleClose();
 	};
 
 	return (
@@ -44,7 +45,7 @@ const OpenFile = (props) => {
 			<div className="modal-dialog">
 				<div className="modal-content">
 					<div className="modal-header">
-						<h5 className="modal-title">Modal title</h5>
+						<h5 className="modal-title">Open File</h5>
 						<button type="button" className="btn-close" onClick={handleClose}/>
 					</div>
 					<div className="modal-body">

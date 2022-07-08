@@ -27,7 +27,7 @@ const Login = (props) => {
 			// console.log(response.data)
 			props.setToken(response.data.access_token);
 			props.setRefToken(response.data.refresh_token);
-			window.location.href = "/";
+			// window.location.href = "/editor";
 		}).catch((error) => {
 			if (error.response) {
 				console.log(error.response)

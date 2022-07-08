@@ -10,6 +10,7 @@ import Nav from "./nav";
 import Login from "./login"
 import Join from "./join"
 import axios from "axios";
+import Home from "./Home";
 
 function App() {
 	const [socket, setSocket] = useState(null);
@@ -92,20 +93,21 @@ function App() {
 					saveFileName={saveFileName}
 					fileName={fileName}
 					socket={socket}
+					showDashOptions={window.location.pathname === "/editor"}
 				/>
 				<Routes>
 					<Route path="/login" exact element={
 						token !== "" && token !== undefined
-							? <Navigate to="/" />
+							? <Navigate to="/editor" />
 							: <Login setToken={setToken} setRefToken={setRefToken}/>
 					} />
 					<Route path="/join" exact element={
 						token !== "" && token !== undefined
-							? <Navigate to="/" />
+							? <Navigate to="/editor" />
 							: <Join setToken={setToken} setRefToken={setRefToken}/>
 					} />
 
-			        <Route path="/" element={
+			        <Route path="/editor" element={
 						token === ""
 							? <Navigate to="/login" />
 							: <div className="d-flex align-items-center justify-content-center flex-column fullSize">
@@ -116,6 +118,9 @@ function App() {
 								)}
 							</div>
 			        } />
+					<Route path="/" exact element={
+						<Home />
+					} />
 				</Routes>
 			</Router>
 		);

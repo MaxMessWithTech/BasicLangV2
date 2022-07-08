@@ -39,13 +39,15 @@ const Nav = (props) => {
 		props.socket.emit("save", document.getElementById("codeEditorTextField").value, props.fileName);
 	}
 
+	function openEditor() { window.location.href = "/editor"; }
+
 
 	return (
 		<nav className="navbar navbar-expand-sm bg-dark navbar-dark customNavbar">
 			<ul className="container-fluid justify-content-start customULNav">
 				<a className="navbar-brand" href="/"><img className="logo" src={BasicLangLogo} alt={"Basic Lang Web"}/></a>
 				{
-					props.token !== "" && props.token !== undefined
+					props.token !== "" && props.token !== undefined && props.showDashOptions
 						? <ul className="navbar-nav">
 							<li className="nav-item dropdown">
 								<a className="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button"
@@ -64,7 +66,13 @@ const Nav = (props) => {
 								</ul>
 							</li>
 						</ul>
-						: null
+						: props.token !== "" && props.token !== undefined
+							?<ul className="navbar-nav">
+								<li className="nav-item">
+									<a className="nav-link" onClick={openEditor}>Open Editor</a>
+								</li>
+							</ul>
+							: null
 				}
 
 			</ul>
@@ -73,15 +81,15 @@ const Nav = (props) => {
 					props.loggedIn
 						? <ul className="navbar-nav">
 							<li className="nav-item">
-								<a className="nav-link active" href="#" onClick={logMeOut}>Logout</a>
+								<a className="nav-link" onClick={logMeOut}>Logout</a>
 							</li>
 						</ul>
 						: <ul className="navbar-nav">
 							<li className="nav-item">
-								<a className="nav-link active" href="/join">Join</a>
+								<a className="nav-link" href="/join">Join</a>
 							</li>
 							<li className="nav-item">
-								<a className="nav-link active" href="/login">Login</a>
+								<a className="nav-link" href="/login">Login</a>
 							</li>
 						</ul>
 				}

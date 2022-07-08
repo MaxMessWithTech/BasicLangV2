@@ -13,6 +13,11 @@
     height: 94vh;
 }
 
+.customAlert {
+    position: absolute;
+    bottom: 0;
+}
+
 .customInput {
     width: 100%;
     border-width: 0.125rem !important;

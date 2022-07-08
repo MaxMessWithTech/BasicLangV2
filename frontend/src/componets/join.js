@@ -20,6 +20,7 @@ const Join = (props) => {
 
 	const [email, setEmail] = useState("");
 	const [emailError, setEmailError] = useState(false);
+	const [emailExistsError, setEmailExistsError] = useState(false)
 
 	const [password, setPassword] = useState("");
 	const [passwordErrors, setPasswordErrors] = useState({
@@ -30,6 +31,7 @@ const Join = (props) => {
 		'any': false
 	});
 
+
 	const [confPassword, setConfPassword] = useState("");
 
 	function ValidateEmail(input) {
@@ -39,6 +41,7 @@ const Join = (props) => {
 	}
 
 	const sendAPI = () => {
+		setEmailExistsError(false)
 		axios({
 			method: "POST",
 			url:"/join",
@@ -54,9 +57,10 @@ const Join = (props) => {
 			// window.location.href = "/";
 		}).catch((error) => {
 			if (error.response) {
-				console.log(error.response)
-				console.log(error.response.status)
-				console.log(error.response.headers)
+				if (error.response.data.msg === 'User Already Exists') { setEmailExistsError(true); }
+				else {
+					console.log(error.response)
+				}
 			}
 		})
 	}
@@ -251,6 +255,16 @@ const Join = (props) => {
 					</div>
 				</div>
 			</div>
+			{
+				emailExistsError
+					? <div className="alert alert-danger d-flex align-items-center alert-dismissible customAlert" role="alert">
+						<div>
+							A user with that email already exists
+						</div>
+						<button type="button" className="btn-close" onClick={(e) => setEmailExistsError(false)}/>
+					</div>
+					: null
+			}
 		</section></ThemeProvider>
 	);
 }

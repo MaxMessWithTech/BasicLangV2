@@ -168,6 +168,29 @@ def logout():
 	return response
 
 
+@app.route('/get-user-files', methods=["POST"])
+@jwt_required()
+def get_user_files():
+	current_user = get_jwt_identity()
+
+	user = User.query.filter_by(email=current_user).first()
+	if not user:
+		return 'Token Error', 401
+
+	files = list()
+
+	if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id)))):
+
+		for file in os.listdir(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id)))):
+			if file.endswith(".bsl"):
+				files.append({'file': file, 'id': len(files)})
+	else:
+		os.mkdir(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id))))
+
+	# emit("setCode", {'data': file.read(), 'fileName': 'script.bsl'})
+	return jsonify(files), 200
+
+
 @socketio.on('message')
 @jwt_required()
 def handle_message(message):
@@ -176,25 +199,25 @@ def handle_message(message):
 
 @socketio.on('load')
 @jwt_required()
-def handle_load():
+def handle_load(fileName):
 	current_user = get_jwt_identity()
 
 	user = User.query.filter_by(email=current_user).first()
 	if not user:
 		return 'Token Error', 401
 	if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id)))):
-		if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), 'script.bsl'))):
+		if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName))):
 			file = open(
-				os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), 'script.bsl')), "r")
+				os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "r")
 		else:
 			file = open(
-				os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), 'script.bsl')), "w+")
+				os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w+")
 	else:
 		os.mkdir(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id))))
-		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), 'script.bsl')), "w+")
+		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w+")
 	print("Load!")
 
-	emit("setCode", {'data': file.read(), 'fileName': 'script.bsl'})
+	emit("setCode", {'data': file.read(), 'fileName': fileName})
 
 
 # file.close()
@@ -202,19 +225,19 @@ def handle_load():
 
 @socketio.on('save')
 @jwt_required()
-def handle_save(code):
+def handle_save(code, fileName):
 	current_user = get_jwt_identity()
 
 	user = User.query.filter_by(email=current_user).first()
 	if not user:
 		return 'Token Error', 401
 	if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id)))):
-		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), 'script.bsl')),
+		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)),
 		            "w")
 		file.write(code)
 	else:
 		os.mkdir(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id))))
-		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), 'script.bsl')),
+		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)),
 		            "w")
 		file.write(code)
 
@@ -245,10 +268,10 @@ def execution_callback(cmd, data, **kwargs):
 
 @socketio.on('sendCode')
 @jwt_required()
-def handle_send_code(code):
+def handle_send_code(code, fileName):
 	print(f"Send Code! {code}")
 
-	handle_save(code)
+	handle_save(code, fileName)
 
 	current_user = get_jwt_identity()
 
@@ -256,16 +279,16 @@ def handle_send_code(code):
 	if not user:
 		return 'Token Error', 401
 
-	fileName = os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), 'script.bsl'))
+	filePath = os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName))
 
-	file_exists = exists(fileName)
+	file_exists = exists(filePath)
 	if file_exists:
-		file = open(fileName, "r")
+		file = open(filePath, "r")
 		# print(file.readlines())
 		# file.write(code)
 		main.run(file, sendCommandCallback=execution_callback)
 	else:
-		print(f"{blcolors.RED}Invalid filename: {repr(fileName)}{blcolors.CLEAR}")
+		print(f"{blcolors.RED}Invalid filename: {repr(filePath)}{blcolors.CLEAR}")
 
 
 @socketio.on('connect')

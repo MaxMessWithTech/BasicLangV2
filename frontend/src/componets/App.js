@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './App.css';
 import Editor from './Editor'
 import useToken from './useToken';
+import useFile from './useFile';
 import Nav from "./nav";
 import Login from "./login"
 import Join from "./join"
@@ -13,6 +14,7 @@ import axios from "axios";
 function App() {
 	const [socket, setSocket] = useState(null);
 	const { token, refToken, setRefToken, removeToken, setToken } = useToken();
+	const {saveFileName, fileName, removeFileName} = useFile();
 
 	useEffect(() => {
 		if (token == null) {
@@ -83,7 +85,14 @@ function App() {
 	} else {
 		return (
 			<Router>
-				<Nav loggedIn={token !== "" && token !== undefined} removeToken={removeToken}/>
+				<Nav
+					loggedIn={token !== "" && token !== undefined}
+					removeToken={removeToken}
+					token={token}
+					saveFileName={saveFileName}
+					fileName={fileName}
+					socket={socket}
+				/>
 				<Routes>
 					<Route path="/login" exact element={
 						token !== "" && token !== undefined
@@ -101,7 +110,7 @@ function App() {
 							? <Navigate to="/login" />
 							: <div className="d-flex align-items-center justify-content-center flex-column fullSize">
 								{ socket ? (
-									<Editor socket={socket} token={token} refToken={refToken} setToken={setToken} removeToken={removeToken}/>
+									<Editor socket={socket} token={token} refToken={refToken} setToken={setToken} removeToken={removeToken} saveFileName={saveFileName} fileName={fileName}/>
 								) : (
 									<div>Not Connected</div>
 								)}

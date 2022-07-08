@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState} from 'react';
 import Canvas from './Canvas.js';
 import greenFlag from './greenFlag.svg';
 import redStop from './redStop.svg';
-import EditorCSS from './Editor.css';
+import './Editor.css';
 import Nav from './nav';
 
 import {
@@ -32,7 +32,6 @@ const Editor = (props) => {
 
     const [clearDraw, setClearDraw] = useState(false);
     const [currentDrawValues, setCurrentDrawValues] = useState({});
-    const [curFile, setCurFile] = useState("");
 
     const socketRef = props.socket
 
@@ -42,7 +41,7 @@ const Editor = (props) => {
         setCurrentDrawValues([]);
         setClearDraw(true);
 
-        socketRef.emit("sendCode", codeValue);
+        socketRef.emit("sendCode", codeValue, props.fileName);
 
         currentLogValue = "";
         //setLogValue(currentLogValue);
@@ -55,7 +54,7 @@ const Editor = (props) => {
 
     function sendStop() {
         console.log("STOP RUN!!")
-        socketRef.emit("message", JSON.stringify({'command': 'stopRun', 'data': ''}));
+        socketRef.emit("message", JSON.stringify({'command': 'stopRun', 'data': ''}), props.fileName);
     }
 
     function setNavValueWithUpdate(numb) {
@@ -67,7 +66,7 @@ const Editor = (props) => {
 
     const openWebsocket = () => {
         console.log('open');
-        socketRef.emit("load");
+        socketRef.emit("load", props.fileName);
         firstUpdate = false;
     }
 
@@ -143,7 +142,8 @@ const Editor = (props) => {
     }, []);
 
     const setCodeHandler = (message) => {
-        setCurFile(message['fileName']);
+        console.log("Set Code!")
+        props.saveFileName(message['fileName']);
         setCodeValue(message['data']);
     }
 
@@ -180,7 +180,7 @@ const Editor = (props) => {
     }
 
     function sendSave() {
-        socketRef.emit("save", document.getElementById("codeEditorTextField").value);
+        socketRef.emit("save", document.getElementById("codeEditorTextField").value, props.fileName);
     }
 
     if (firstUpdate) {
@@ -213,7 +213,6 @@ const Editor = (props) => {
 
     return (
         <div className="d-flex align-items-center justify-content-center flex-column editorWindow">
-
             <ReflexContainer className="d-flex align-items-center justify-content-center editorWindow" orientation="vertical" windowResizeAware={true}>
                 <ReflexElement className="d-flex align-items-center justify-content-center codeBox" minSize={window.innerWidth * 0.2} maxSize={window.innerWidth * 0.8}>
                     <textarea
@@ -248,7 +247,7 @@ const Editor = (props) => {
                         data-gramm_editor="false"
                         autoFocus
                     />
-                    <div className="fileDisplay">{curFile}</div>
+                    <div className="fileDisplay">{props.fileName}</div>
                 </ReflexElement>
                 <ReflexSplitter/>
                 <ReflexElement className="d-flex flex-column align-items-center justify-content-center sideBox" flex={0.2}>

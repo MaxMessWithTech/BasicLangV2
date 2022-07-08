@@ -1,9 +1,12 @@
 import React, { useRef, useEffect, useState} from 'react';
 import axios from "axios";
+import OpenFile from './openFile';
 import './nav.css';
 import BasicLangLogo from './BasicLangLogo.svg'
 
 const Nav = (props) => {
+
+	const [openFile, setOpenFile] = useState(false);
 
 	function logMeOut() {
 		console.log("Post")
@@ -21,31 +24,38 @@ const Nav = (props) => {
 			}
 		})
 	}
-	// console.log(props.loggedIn);
+
+	function open() {
+		setOpenFile(true);
+	}
 
 
 	return (
 		<nav className="navbar navbar-expand-sm bg-dark navbar-dark customNavbar">
 			<ul className="container-fluid justify-content-start customULNav">
 				<a className="navbar-brand" href="/"><img className="logo" src={BasicLangLogo} alt={"Basic Lang Web"}/></a>
-
-				<ul className="navbar-nav">
-					<li className="nav-item dropdown">
-						<a className="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button"
-						   data-bs-toggle="dropdown" aria-expanded="false">
-							File
-						</a>
-						<ul className="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-							<li><a className="dropdown-item" >Open</a></li>
-							<li><a className="dropdown-item" >Save As</a></li>
-							<li><a className="dropdown-item" >Save</a></li>
-							<li>
-								<hr className="dropdown-divider" />
+				{
+					props.token !== "" && props.token !== undefined
+						? <ul className="navbar-nav">
+							<li className="nav-item dropdown">
+								<a className="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button"
+								   data-bs-toggle="dropdown" aria-expanded="false">
+									File
+								</a>
+								<ul className="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+									<li><a className="dropdown-item" onClick={open}>Open</a></li>
+									<li><a className="dropdown-item" >Save As</a></li>
+									<li><a className="dropdown-item" >Save</a></li>
+									<li>
+										<hr className="dropdown-divider" />
+									</li>
+									<li><a className="dropdown-item" >Something else here</a></li>
+								</ul>
 							</li>
-							<li><a className="dropdown-item" >Something else here</a></li>
 						</ul>
-					</li>
-				</ul>
+						: null
+				}
+
 			</ul>
 			<ul className="container-fluid justify-content-end customULNav">
 				{
@@ -65,6 +75,7 @@ const Nav = (props) => {
 						</ul>
 				}
 			</ul>
+			<OpenFile open={openFile} setOpenFile={setOpenFile} token={props.token} socket={props.socket}/>
 		</nav>
 	);
 }

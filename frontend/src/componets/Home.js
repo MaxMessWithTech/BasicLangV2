@@ -3,6 +3,11 @@ import BasicLangLogo from './BasicLangLogo.svg'
 import './Home.css';
 
 const Home = (props) => {
+
+	function openEditor() {
+		window.location.href = "/editor"
+	}
+
 	return (
 		<div className="d-flex align-items-center justify-content-center flex-column homeWindow gradient-custom">
 			<div className="card bg-dark text-white HomeCard" style={{borderRadius: '1rem'}}>
@@ -10,6 +15,8 @@ const Home = (props) => {
 					<img className="logoHome" src={BasicLangLogo} alt={"Basic Lang Web"}/>
 					<h3>Created By: Max Miller</h3>
 					<p>This page is still under construction... please visit my <a href="https://github.com/MaxMessWithTech/BasicLangV2">github page</a></p>
+
+					<button type="button" className="btn btn-secondary" onClick={(e) => openEditor()}>Open Editor</button>
 				</div>
 			</div>
 		</div>

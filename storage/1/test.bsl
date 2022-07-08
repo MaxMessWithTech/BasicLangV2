@@ -1,1 +1,2 @@
-TEST
+run:
+	print("Hello World")

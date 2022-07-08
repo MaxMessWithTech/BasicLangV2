@@ -38,6 +38,7 @@ const Editor = (props) => {
     //socketRef.current.send(JSON.stringify({'command': 'getChildren'}));
     function sendCode() {
         // console.log(JSON.stringify({'command': 'sendCode', 'data': codeValue}))
+        console.log(codeValue);
         setCurrentDrawValues([]);
         setClearDraw(true);
 
@@ -232,6 +233,7 @@ const Editor = (props) => {
 
                                 // set textarea value to: text before caret + tab + text after caret
                                 e.target.value = val.substring(0, start) + '\t' + val.substring(end);
+                                setCodeValue(e.target.value);
 
                                 // put caret at right position again
                                 e.target.selectionStart = e.target.selectionEnd = start + 1;

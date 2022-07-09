@@ -23,6 +23,25 @@ let currentLogValue = "";
 let isCtrl = false;
 let sentSave = false;
 let currentDrawIndex = 0;
+let lastCodeVal = "";
+
+
+function getIndicesOf(searchStr, str, caseSensitive) {
+    let searchStrLen = searchStr.length;
+    if (searchStrLen === 0) {
+        return [];
+    }
+    let startIndex = 0, index, indices = [];
+    if (!caseSensitive) {
+        str = str.toLowerCase();
+        searchStr = searchStr.toLowerCase();
+    }
+    while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+        indices.push(index);
+        startIndex = index + searchStrLen;
+    }
+    return indices;
+}
 
 
 const Editor = (props) => {
@@ -147,6 +166,7 @@ const Editor = (props) => {
         // console.log(message);
         props.saveFileName(message['fileName']);
         setCodeValue(message['data']);
+        lastCodeVal = message['data'];
     }
 
     useEffect(() => {
@@ -197,6 +217,31 @@ const Editor = (props) => {
         }
     }
 
+    const CodeChangeCustom = (e) => {
+        const lastIndices = getIndicesOf("\n", lastCodeVal, false)
+        const curIndices = getIndicesOf("\n", e.target.value, false)
+
+        if (lastIndices.length !== curIndices.length && lastIndices.length < curIndices.length) {
+            let finalIndex = getIndicesOf("\n", e.target.value, false)
+            for (let x = 0; x < lastIndices.length; x++) {
+                finalIndex.splice(finalIndex.indexOf(lastIndices[x]), 1);
+            }
+
+            let lastTab = getIndicesOf(
+                "\t", e.target.value.substring(finalIndex[0], curIndices[curIndices.indexOf(finalIndex[0]) - 1] + 1), false
+            ).length;
+
+
+            setCodeValue(
+                e.target.value.substring(0, finalIndex[0] + 2) +
+                "\t".repeat(lastTab) +
+                e.target.value.substring(finalIndex[0] + 3, e.target.value.length)
+            );
+            return
+        }
+
+        setCodeValue(e.target.value);
+    }
 
 
     const draw = () => {
@@ -221,9 +266,8 @@ const Editor = (props) => {
                         id="codeEditorTextField"
                         className="codeEditorTextField"
                         value={codeValue}
-                        onChange={e => setCodeValue(e.target.value)}
+                        onChange={e => CodeChangeCustom(e)}
                         onKeyDown={e => {
-                            // console.log(e)
                             if (e.key === "Tab") { // tab was pressed
 
                                 // get caret position/selection
@@ -243,6 +287,7 @@ const Editor = (props) => {
                                 return false;
 
                             }
+                            lastCodeVal = e.target.value;
                         }}
                         autoCapitalize="none"
                         autoComplete="none"

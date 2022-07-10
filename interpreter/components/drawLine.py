@@ -7,7 +7,7 @@ from interpreter.utils.blcolors import blcolors
 # draw(x1, y1, x2, y2, color)
 # draw(0, 0, 100, 100, (255, 255, 255))
 class DrawLine:
-	_declaration = "draw.drawLine("
+	_declaration = "drawLine("
 
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line

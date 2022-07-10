@@ -5,7 +5,7 @@ from interpreter.utils.blcolors import blcolors
 # draw(x1, y1, x2, y2, color)
 # draw(0, 0, 100, 100, (255, 255, 255))
 class DrawCircle:
-	_declaration = "draw.drawCircle("
+	_declaration = "drawCircle("
 
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line

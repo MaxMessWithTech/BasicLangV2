@@ -1,43 +1,27 @@
 import importlib
 import os
-
-from interpreter.components.print import Print
-from interpreter.components.delay import Delay
-from interpreter.components.drawLine import DrawLine
-from interpreter.components.drawCircle import DrawCircle
-
-from interpreter.components.functionCall import FunctionCall
-from interpreter.components.var import Var
-from interpreter.components.For import For
-
-from interpreter.components.IF import If
-from interpreter.components.ELSEIF import ElseIf
-from interpreter.components.ELSE import Else
 from interpreter.utils.blcolors import blcolors
 
-# importlib.import_module("comport.data.models")
+objects = list()
+typesOfObjects = list()
 
-for root, dirs, files in os.walk("../components"):
-	for file in files:
-		if file.endswith(".py"):
-			print(os.path.join(root, file))
+for (root, dirs, files) in os.walk('./interpreter/components', topdown=True):
+	if "__init__.py" in files:
+		module = importlib.import_module(root[2:].replace("/", ".") + ".__init__")
 
-# This is a list, it does things, don't question it future Max
-# "()" is for functions
-objects = [
-	Print,  # print()
-	Delay,  # delay()
-	DrawLine,  # draw.drawLine()
-	DrawCircle,  # draw.drawCircle()
-	For,
-	ElseIf,  # else if()
-	If,  # if()
-	Else,  # else
-	FunctionCall,  # ()
-	Var  # =
-]
-typesOfObjects = [x._declaration for x in objects]
-print(typesOfObjects)
+		# Adds the list from the __init__.py
+		objects = objects + module.objects
+		# root[25:] Gets rid of ./interpreter/components
+		if root[25:] != "":
+			for x in module.objects:
+				x._declaration = f"{root[25:]}.{x._declaration}"
+				typesOfObjects = typesOfObjects + [x._declaration]
+			# typesOfObjects = typesOfObjects + [f"{root[25:]}.{x._declaration}" for x in module.objects]
+		else:
+			typesOfObjects = typesOfObjects + [x._declaration for x in module.objects]
+
+# print(objects)
+# print(typesOfObjects)
 
 
 # PURPOSE - This is gonna figure out which object should be created 

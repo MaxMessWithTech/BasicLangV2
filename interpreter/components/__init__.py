@@ -1,3 +1,4 @@
+"""
 from print import Print
 from delay import Delay
 
@@ -8,3 +9,4 @@ from For import For
 from IF import If
 from ELSEIF import ElseIf
 from ELSE import Else
+"""

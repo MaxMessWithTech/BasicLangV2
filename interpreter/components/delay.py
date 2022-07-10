@@ -5,6 +5,8 @@ from interpreter.utils.blcolors import blcolors
 
 
 class Delay:
+	_declaration = "delay("
+
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		self.fixedLine = self.removeDeclaration(self.fixLine(line))
@@ -34,7 +36,7 @@ class Delay:
 			if line[::-1][x] == ")":
 				break
 
-		return line[:len(line)-x-1].replace(self.declaration, "")
+		return line[:len(line)-x-1].replace(self._declaration, "")
 
 	@staticmethod
 	def fixLine(line):
@@ -49,4 +51,4 @@ class Delay:
 
 	@property
 	def declaration(self):
-		return "delay("
+		return self._declaration

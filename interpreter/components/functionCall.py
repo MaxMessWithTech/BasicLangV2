@@ -1,4 +1,6 @@
 class FunctionCall:
+    _declaration = "()"
+
     def __init__(self, line, headless=False, sendCommandCallback=None):
         self.name = self.fixLine(line.replace("()", ""))
         self.sendCommandCallback = sendCommandCallback

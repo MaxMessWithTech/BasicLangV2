@@ -2,13 +2,11 @@ from interpreter.utils.decInterp import decInterp
 from interpreter.utils.blcolors import blcolors
 
 class Else:
-	_decloration = "else" # We use if as it will be inheriting from an if statement
-
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		# New Handeling method
 		self.parent = None
-		self.true = False # Defult to False
+		self.true = False  # Default to False
 
 		self.fixedLine = ""
 		self.lines = list()
@@ -128,7 +126,7 @@ class Else:
 			if line[::-1][x] == ")":
 				break
 
-		return line[:len(line)-x-1].replace(self._decloration, "")
+		return line[:len(line)-x-1].replace(self.declaration, "")
 
 	@staticmethod
 	def fixLine(line):
@@ -154,3 +152,7 @@ class Else:
 			self.sendCommandCallback("error", msg)
 		else:
 			print(msg)
+
+	@property
+	def declaration(self):
+		return "else"

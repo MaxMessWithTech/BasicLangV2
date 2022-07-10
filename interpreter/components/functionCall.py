@@ -1,6 +1,4 @@
 class FunctionCall:
-    _decloration = "()"
-    
     def __init__(self, line, headless=False, sendCommandCallback=None):
         self.name = self.fixLine(line.replace("()", ""))
         self.sendCommandCallback = sendCommandCallback
@@ -19,3 +17,7 @@ class FunctionCall:
             self.sendCommandCallback("error", msg)
         else:
             print(msg)
+
+    @property
+    def declaration(self):
+        return "()"

@@ -1,3 +1,6 @@
+import importlib
+import os
+
 from interpreter.components.print import Print
 from interpreter.components.delay import Delay
 from interpreter.components.drawLine import DrawLine
@@ -11,6 +14,12 @@ from interpreter.components.IF import If
 from interpreter.components.ELSEIF import ElseIf
 from interpreter.components.ELSE import Else
 from interpreter.utils.blcolors import blcolors
+importlib.import_module("comport.data.models")
+
+for root, dirs, files in os.walk("/mydir"):
+    for file in files:
+        if file.endswith(".txt"):
+             print(os.path.join(root, file))
 
 # This is a list, it does things, don't question it future Max
 # "()" is for functions
@@ -26,7 +35,7 @@ objects = [
 	FunctionCall,  # ()
 	Var  # =
 ]
-typesOfObjects = [x._decloration for x in objects]
+typesOfObjects = [x.declaration for x in objects]
 
 
 # PURPOSE - This is gonna figure out which object should be created 

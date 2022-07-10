@@ -2,8 +2,6 @@ from interpreter.utils import decInterp
 
 
 class Print:
-	_decloration = "print("
-
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		self.fixedLine = self.removeDeclaration(self.fixLine(line))
@@ -25,7 +23,7 @@ class Print:
 			if line[::-1][x] == ")":
 				break
 
-		return line[:len(line)-x-1].replace(self._decloration, "")
+		return line[:len(line)-x-1].replace(self.declaration, "")
 
 	@staticmethod
 	def fixLine(line):
@@ -37,3 +35,7 @@ class Print:
 			self.sendCommandCallback("error", msg)
 		else:
 			print(msg)
+
+	@property
+	def declaration(self):
+		return "print("

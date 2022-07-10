@@ -4,8 +4,6 @@ from interpreter.utils.blcolors import blcolors
 
 
 class For:
-	_decloration = "for("
-
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 
@@ -124,7 +122,7 @@ class For:
 			if line[::-1][x] == ")":
 				break
 
-		return line[:len(line) - x - 1].replace(self._decloration, "")
+		return line[:len(line) - x - 1].replace(self.declaration, "")
 
 	@staticmethod
 	def fixLine(line):
@@ -164,3 +162,7 @@ class For:
 			return True
 		except:
 			return False
+
+	@property
+	def declaration(self):
+		return "for("

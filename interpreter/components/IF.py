@@ -5,8 +5,6 @@ from interpreter.utils.blcolors import blcolors
 
 
 class If:
-	_decloration = "if("
-
 	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		# New Handeling method
@@ -118,7 +116,7 @@ class If:
 			if line[::-1][x] == ")":
 				break
 
-		return line[:len(line)-x-1].replace(self._decloration, "")
+		return line[:len(line)-x-1].replace(self.declaration, "")
 
 	@staticmethod
 	def fixLine(line):
@@ -144,3 +142,7 @@ class If:
 			self.sendCommandCallback("error", msg)
 		else:
 			print(msg)
+
+	@property
+	def declaration(self):
+		return "if("

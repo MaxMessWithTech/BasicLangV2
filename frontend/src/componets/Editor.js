@@ -24,6 +24,8 @@ let isCtrl = false;
 let sentSave = false;
 let currentDrawIndex = 0;
 let lastCodeVal = "";
+let lastSelection = 0;
+let changedIndents = false;
 
 
 function getIndicesOf(searchStr, str, caseSensitive) {
@@ -46,6 +48,7 @@ function getIndicesOf(searchStr, str, caseSensitive) {
 
 const Editor = (props) => {
     const [codeValue, setCodeValue] = useState('');
+    const codeRef = useRef(null);
     // const [logValue, setLogValue] = useState("");
     const [navValue, setNavValue] = useState(0);
 
@@ -218,30 +221,70 @@ const Editor = (props) => {
     }
 
     const CodeChangeCustom = (e) => {
+        // Find all new lines
         const lastIndices = getIndicesOf("\n", lastCodeVal, false)
-        const curIndices = getIndicesOf("\n", e.target.value, false)
+        // [-1] is there so that the start also counts as a \n
+        const curIndices = [-1].concat(getIndicesOf("\n", e.target.value, false));
 
-        if (lastIndices.length !== curIndices.length && lastIndices.length < curIndices.length) {
+        // This makes sure the change made is a new line, and that it was added and not removed
+        if (lastIndices.length !== curIndices.length && lastIndices.length < curIndices.length - 1) {
+            // Find new line indices again so that we still have access to curIndices
             let finalIndex = getIndicesOf("\n", e.target.value, false)
+
+            // Remove all indices that were already in lastIndices
             for (let x = 0; x < lastIndices.length; x++) {
                 finalIndex.splice(finalIndex.indexOf(lastIndices[x]), 1);
             }
 
-            let lastTab = getIndicesOf(
-                "\t", e.target.value.substring(finalIndex[0], curIndices[curIndices.indexOf(finalIndex[0]) - 1] + 1), false
-            ).length;
+            // Make sure the 2 indices aren't right next to each other
+            // Loop backwards starting at the index before the new line
 
+            let useIndex = curIndices.indexOf(finalIndex[0])
 
-            setCodeValue(
-                e.target.value.substring(0, finalIndex[0] + 2) +
-                "\t".repeat(lastTab) +
-                e.target.value.substring(finalIndex[0] + 3, e.target.value.length)
+            for (let x = curIndices.indexOf(finalIndex[0]) - 1; x > -1; x--) {
+                if (curIndices[x] + 1 !== curIndices[useIndex]) {
+                    useIndex = x;
+                    break;
+                }
+            }
+
+            // This gets the last line before the one added
+            const lastLine = e.target.value.substring(
+                curIndices[useIndex] + 1,
+                curIndices[useIndex + 1] + 1
             );
+
+            // Figure out how many tabs should we add to this line
+            let lastTab = getIndicesOf("\t", lastLine, false).length;
+            // lastTab += getIndicesOf(":", lastLine, false).length;
+
+            // Set the last selection, but add the number of indents
+            lastSelection = e.target.selectionStart + lastTab;
+
+            changedIndents = true;
+
+            // Set the code value
+            setCodeValue(
+                e.target.value.substring(0, curIndices[useIndex] + 1) +
+                lastLine +
+                "\t".repeat(lastTab) +
+                e.target.value.substring(curIndices[useIndex + 1] + 1, e.target.value.length)
+            );
+
+            // Stop execution here so that we don't set the value twice
             return
         }
 
         setCodeValue(e.target.value);
     }
+
+    useEffect(() => {
+        if (codeRef.current && changedIndents) {
+            codeRef.current['selectionStart'] = lastSelection;
+            codeRef.current['selectionEnd'] = lastSelection;
+            changedIndents = false;
+        }
+    }, [codeValue])
 
 
     const draw = () => {
@@ -266,6 +309,7 @@ const Editor = (props) => {
                         id="codeEditorTextField"
                         className="codeEditorTextField"
                         value={codeValue}
+                        ref={codeRef}
                         onChange={e => CodeChangeCustom(e)}
                         onKeyDown={e => {
                             if (e.key === "Tab") { // tab was pressed

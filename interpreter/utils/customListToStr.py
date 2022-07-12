@@ -2,9 +2,11 @@ def customListToStr(_list: list) -> str:
 	"""
 	-- Custom List to String Converter --
 
-	Converts for the Decloration Interpreter,
+	Converts for the Declaration Interpreter,
 	as it needs a for loop to be converted into something
-	that looks like multiple args to the Decloration Interpreter
+	that looks like multiple args to the Declaration Interpreter
+
+	https://github.com/MaxMessWithTech/BasicLangV2/wiki/Utility-File-Reference#customlisttostrnot-for-use-in-custom-modules
 	"""
 	# string = "("
 	string = ""

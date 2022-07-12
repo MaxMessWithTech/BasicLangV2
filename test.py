@@ -1,33 +1,30 @@
-import copy
+from interpreter.utils import decInterp
 
-# test = ['[', '[', 'TEST', ']', ',', '[', 'TEST 2', ']', ']']   # -> [["TEST"], ["TEST 2"]]
 
-test = "(156, 256, 356, 256, (255, 255, 255))"
+class NameOfPackage:
+	_declaration = "nameOfPackage("
 
-lists = list()
-openingBrackets = list()  # To keep track of used indices
+	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
+		self.line = line
+		self.fixedLine = self.fixLine(line)
+		self.sendCommandCallback = sendCommandCallback
 
-for x in range(len(test)):
-    if test[x] == "]":
-        for y in range(x)[::-1]:
-            if test[y] == "[" and y not in openingBrackets:
-                openingBrackets.append(y)
-                lists.append({'start': y, 'end': x})
-                break
-    elif test[x] == ")":
-        for y in range(x)[::-1]:
-            if test[y] == "(" and y not in openingBrackets:
-                openingBrackets.append(y)
-                lists.append({'start': y, 'end': x})
-                break
+	# This is called during runtime
+	def run(self, varAddCallback, varGetCallback, funcCallback):
+		editLine, dataTypes, valid = decInterp.decInterp(self.fixedLine, varGetCallback, self.sendError)
 
-print(f"Lists: {lists}")
-print(test[0:37])
+		self.sendCommandCallback("log", editLine[0])
 
-for part in lists:
-    newList = list()
-    print(test[part['start'] + 1:part['end']].split(","))
-    for x in test[part['start'] + 1:part['end']]:
-        if x != ",":
-            newList.append(x)
-    print(f"New List: {newList}")
+	def fixLine(self, line):
+		line = line.replace("\t", "").replace("\n", "")
+		for x in range(len(line)):
+			if line[::-1][x] == ")":
+				break
+
+		return line[:len(line)-x-1].replace(self._declaration, "")
+
+	def sendError(self, msg):
+		if self.sendCommandCallback:
+			self.sendCommandCallback("error", msg)
+		else:
+			print(msg)

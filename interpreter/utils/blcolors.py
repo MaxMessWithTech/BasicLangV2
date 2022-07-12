@@ -1,4 +1,9 @@
 class blcolors:
+    """
+    BLColors
+    Allows you to use colors in the terminal
+    https://github.com/MaxMessWithTech/BasicLangV2/wiki/Utility-File-Reference#blcolors
+    """
     BLACK = "\u001b[30m"
     RED = "\u001b[31m"
     GREEN = "\u001b[32m"

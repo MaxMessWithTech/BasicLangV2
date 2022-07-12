@@ -12,10 +12,12 @@ def decInterp(
 ) -> Tuple[list, list, bool]:
 	"""
 	--Declaration Interpreter--
-	Inputs: parts(list) - Current Value, getVars(def) - call back
-	Returns: Formatted Line(str), Data Type(list), valid(bool)
+	Inputs: line(str), getVars(def) - call back, errorCallback(def)
+	Returns: Formatted Line Args(list), Data Types(list), valid(bool)
 
 	Finding Var references and replaces them with their value in the line
+
+	https://github.com/MaxMessWithTech/BasicLangV2/wiki/Utility-File-Reference#decloration-interpreter
 	"""
 
 	"""

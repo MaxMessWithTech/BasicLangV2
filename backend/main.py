@@ -191,6 +191,28 @@ def get_user_files():
 	return jsonify(files), 200
 
 
+@app.route('/get-packages', methods=["POST"])
+@jwt_required()
+def get_available_packages():
+	current_user = get_jwt_identity()
+
+	user = User.query.filter_by(email=current_user).first()
+	if not user:
+		return 'Token Error', 401
+
+	packages = list()
+
+	for (root, dirs, files) in os.walk('./interpreter/components', topdown=True):
+		# If there's an __init__.py file we need to find the objects in that python package
+		if "__init__.py" in files:
+			# This imports the __init__.py file, and sets its reference to the module var
+			for package in dirs:
+				if package != "__pycache__":
+					packages.append({'_package': package, 'id': len(packages)})
+
+	return jsonify(packages), 200
+
+
 @app.route('/create-file', methods=["POST"])
 @jwt_required()
 def create_file():

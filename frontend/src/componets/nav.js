@@ -4,11 +4,13 @@ import OpenFile from './openFile';
 import CreateFile from './createFile'
 import './nav.css';
 import BasicLangLogo from './BasicLangLogo.svg'
+import PackageManager from "./packageManager";
 
 const Nav = (props) => {
 
 	const [openFile, setOpenFile] = useState(false);
 	const [createFile, setCreateFile] = useState(false);
+	const [packageManager, setPackageManager] = useState(false);
 
 	function logMeOut() {
 		console.log("Post")
@@ -41,6 +43,10 @@ const Nav = (props) => {
 
 	function openEditor() { window.location.href = "/editor"; }
 
+	function openPackageManager() {
+		setPackageManager(true);
+	}
+
 
 	return (
 		<nav className="navbar navbar-expand-sm bg-dark navbar-dark customNavbar">
@@ -63,6 +69,15 @@ const Nav = (props) => {
 										<hr className="dropdown-divider" />
 									</li>
 									<li><a className="dropdown-item" >Something else here</a></li>
+								</ul>
+							</li>
+							<li className="nav-item dropdown">
+								<a className="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button"
+								   data-bs-toggle="dropdown" aria-expanded="false">
+									Code
+								</a>
+								<ul className="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+									<li><a className="dropdown-item" onClick={openPackageManager}>Package Manager</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -96,6 +111,7 @@ const Nav = (props) => {
 			</ul>
 			<OpenFile open={openFile} setOpenFile={setOpenFile} token={props.token} socket={props.socket}/>
 			<CreateFile open={createFile} setOpenFile={setCreateFile} token={props.token} socket={props.socket}/>
+			<PackageManager open={packageManager} setOpen={setPackageManager} token={props.token} socket={props.socket}/>
 		</nav>
 	);
 }

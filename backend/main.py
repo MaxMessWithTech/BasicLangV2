@@ -333,7 +333,7 @@ def handle_send_code(code, fileName):
 		file = open(filePath, "r")
 		# print(file.readlines())
 		# file.write(code)
-		main.run(file, sendCommandCallback=execution_callback)
+		main.run(file, usePackages=["WEEEEEE"], sendCommandCallback=execution_callback)
 	else:
 		print(f"{blcolors.RED}Invalid filename: {repr(filePath)}{blcolors.CLEAR}")
 

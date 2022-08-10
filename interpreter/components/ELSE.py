@@ -5,7 +5,7 @@ from interpreter.utils.blcolors import blcolors
 class Else:
 	_declaration = "else"
 
-	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
+	def __init__(self, line, usePackages=list, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		# New Handeling method
 		self.parent = None
@@ -16,6 +16,7 @@ class Else:
 		self.comp = list()
 		self.headless = headless
 		self.sendCommandCallback = sendCommandCallback
+		self.usePackages = usePackages
 
 	def compile(self):
 		from interpreter.utils.interpretObj import interpretObj
@@ -49,7 +50,10 @@ class Else:
 					)
 			else:
 				obj = interpretObj(
-					fixedLine, self.sendError, headless=self.headless, 
+					fixedLine,
+					self.sendError,
+					usePackages=self.usePackages,
+					headless=self.headless,
 					sendCommandCallback=self.sendCommandCallback
 				)
 				if obj:

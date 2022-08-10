@@ -5,13 +5,14 @@ from interpreter.utils.thereBeACommentInOurMidst import handleComment
 
 
 class Code:
-    def __init__(self, lines, headless=False, sendCommandCallback=None):
+    def __init__(self, lines, usePackages=list, headless=False, sendCommandCallback=None):
         self.lines = lines
         self.comp = list()
-        self.runFuncComp = Function("run", headless=headless, sendCommandCallback=sendCommandCallback)
+        self.runFuncComp = Function("run", usePackages=usePackages, headless=headless, sendCommandCallback=sendCommandCallback)
         self.vars = list()
         self.headless = headless
         self.sendCommandCallback = sendCommandCallback
+        self.usePackages = usePackages
     
     # PURPOSE: Convert file lines to objects
     def compile(self):
@@ -35,7 +36,7 @@ class Code:
                     foundRun = True
                     curFunc = self.runFuncComp
                 else:
-                    curFunc = Function(name, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
+                    curFunc = Function(name, usePackages=self.usePackages, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
                     self.printLn("IT'S A FUNCTION!!")
             elif indent != 0:
                 curFunc.addLine(line)

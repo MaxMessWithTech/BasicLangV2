@@ -4,6 +4,7 @@ from interpreter.utils.blcolors import blcolors
 
 
 objects = list()  # This stores all the object references.  Ex: Print
+sectionedTypesOfObjects = list()  # This stores all the types of objects, along with where they came from Ex: [{name: "draw", "objs": []}]
 typesOfObjects = list()  # This stores all the object declaration vars.  Ex: "print("
 errors = list()  # Stores the errors incurred while loading modules
 
@@ -21,11 +22,16 @@ for (root, dirs, files) in os.walk('./interpreter/components', topdown=True):
 
 			# root[25:] Gets rid of ./interpreter/components
 			if root[25:] != "":
+				tempObjList = list()
+
 				# Loops through the objects list in the __init__.py file
 				for x in module.objects:
 					# Grabs the _declaration from each class
 					x._declaration = f"{root[25:]}.{x._declaration}"
-					typesOfObjects = typesOfObjects + [x._declaration]
+					tempObjList = tempObjList + [x._declaration]
+					print(f"found object: {x._declaration}")
+
+				sectionedTypesOfObjects.append({'name': root[25:], 'objs': tempObjList})
 			# typesOfObjects = typesOfObjects + [f"{root[25:]}.{x._declaration}" for x in module.objects]
 			else:
 				# If it's the main directory, we can just do this
@@ -39,7 +45,7 @@ for (root, dirs, files) in os.walk('./interpreter/components', topdown=True):
 
 # PURPOSE - This is gonna figure out which object should be created 
 #           as I'm stupid and this is annoying
-def interpretObj(line, errorCallback, headless=False, sendCommandCallback=None) -> any:
+def interpretObj(line, errorCallback, usePackages=list, headless=False, sendCommandCallback=None) -> any:
 	"""
 	--Interpret Object--
 	Inputs: line(str)
@@ -48,6 +54,15 @@ def interpretObj(line, errorCallback, headless=False, sendCommandCallback=None) 
 	Creates an object based on the declaration
 	https://github.com/MaxMessWithTech/BasicLangV2/wiki/Utility-File-Reference
 	"""
+
+	global typesOfObjects
+
+	print(usePackages)
+
+	if len(usePackages) != 0:
+		for _module in sectionedTypesOfObjects:
+			if _module['name'] in usePackages:
+				typesOfObjects = typesOfObjects + _module['objs']
 
 	# Loop through errors from above
 	for error in errors:
@@ -59,6 +74,7 @@ def interpretObj(line, errorCallback, headless=False, sendCommandCallback=None) 
 			try:
 				obj = objects[typesOfObjects.index(type)](
 					line,
+					usePackages=usePackages,
 					headless=headless,
 					sendCommandCallback=sendCommandCallback
 				)

@@ -24,7 +24,7 @@ if __name__ == "__main__":
     else:
         print(f"{blcolors.RED}Invalid filename: {repr(fileName)}{blcolors.CLEAR}")
 else:
-    def run(file, sendCommandCallback=None):
-        codeObj = Code(file.readlines(), headless=True, sendCommandCallback=sendCommandCallback)
+    def run(file, usePackages=list, sendCommandCallback=None):
+        codeObj = Code(file.readlines(), usePackages=usePackages, headless=True, sendCommandCallback=sendCommandCallback)
         codeObj.compile()
         codeObj.run()

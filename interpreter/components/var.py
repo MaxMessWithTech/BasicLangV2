@@ -5,7 +5,7 @@ from interpreter.utils.blcolors import blcolors
 class Var:
     _declaration = "="
 
-    def __init__(self, line, headless=False, sendCommandCallback=None):
+    def __init__(self, line, usePackages=list, headless=False, sendCommandCallback=None):
         self.line = line
         self.name = ""
         self.value = ""

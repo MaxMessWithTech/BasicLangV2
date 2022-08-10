@@ -61,7 +61,7 @@ if __name__ == "__main__":
     file_exists = exists(fileName)
     if file_exists:
         file = open(fileName, "r")
-        main.run(file, sendCommandCallback=testCallback)
+        main.run(file, usePackages=["draw"], sendCommandCallback=testCallback)
         if display:
             window.mainloop()
     else:

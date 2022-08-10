@@ -6,12 +6,13 @@ from interpreter.utils.interpretObj import interpretObj
 
 
 class Function:
-	def __init__(self, name, headless=False, sendCommandCallback=None):
+	def __init__(self, name, usePackages=list, headless=False, sendCommandCallback=None):
 		self.lines = list()
 		self.name = name
 		self.comp = list()
 		self.headless = headless
 		self.sendCommandCallback = sendCommandCallback
+		self.usePackages = usePackages
 
 	# PURPOSE: Convert file lines to objects
 	def compile(self):
@@ -40,6 +41,7 @@ class Function:
 				obj = interpretObj(
 					fixedLine,
 					self.sendError,
+					usePackages=self.usePackages,
 					headless=self.headless, 
 					sendCommandCallback=self.sendCommandCallback)
 				

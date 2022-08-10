@@ -5,7 +5,7 @@ from interpreter.utils.blcolors import blcolors
 class ElseIf:
 	_declaration = "else if("
 
-	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
+	def __init__(self, line, usePackages=list, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		# New Handeling method
 		self.parent = None
@@ -17,6 +17,7 @@ class ElseIf:
 		self.comp = list()
 		self.headless = headless
 		self.sendCommandCallback = sendCommandCallback
+		self.usePackages = usePackages
 
 	def compile(self):
 		from interpreter.utils.interpretObj import interpretObj
@@ -49,7 +50,7 @@ class ElseIf:
 						f"{blcolors.RED}  INVALID INDENTION AT LINE {fixedLine}, WITH INDENT OF {indent}{blcolors.CLEAR}"
 					)
 			else:
-				obj = interpretObj(fixedLine, self.sendError, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
+				obj = interpretObj(fixedLine, self.sendError, usePackages=self.usePackages, headless=self.headless, sendCommandCallback=self.sendCommandCallback)
 				if obj:
 					from interpreter.components.ELSE import Else
 					from interpreter.components.IF import If

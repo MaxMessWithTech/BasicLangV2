@@ -4,7 +4,7 @@ from interpreter.utils import decInterp
 class Print:
 	_declaration = "print("
 
-	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
+	def __init__(self, line, usePackages=list, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		self.fixedLine = self.removeDeclaration(self.fixLine(line))
 		self.sendCommandCallback = sendCommandCallback

@@ -7,7 +7,7 @@ from interpreter.utils.blcolors import blcolors
 class Delay:
 	_declaration = "delay("
 
-	def __init__(self, line, headless=False, sendCommandCallback=None) -> None:
+	def __init__(self, line, usePackages=list, headless=False, sendCommandCallback=None) -> None:
 		self.line = line
 		self.fixedLine = self.removeDeclaration(self.fixLine(line))
 		self.sendCommandCallback = sendCommandCallback

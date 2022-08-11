@@ -111,7 +111,7 @@ const Nav = (props) => {
 			</ul>
 			<OpenFile open={openFile} setOpenFile={setOpenFile} token={props.token} socket={props.socket}/>
 			<CreateFile open={createFile} setOpenFile={setCreateFile} token={props.token} socket={props.socket}/>
-			<PackageManager open={packageManager} setOpen={setPackageManager} token={props.token} socket={props.socket}/>
+			<PackageManager open={packageManager} setOpen={setPackageManager} token={props.token} socket={props.socket} fileName={props.fileName}/>
 		</nav>
 	);
 }

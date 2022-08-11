@@ -60,7 +60,7 @@ const Editor = (props) => {
     //socketRef.current.send(JSON.stringify({'command': 'getChildren'}));
     function sendCode() {
         // console.log(JSON.stringify({'command': 'sendCode', 'data': codeValue}))
-        console.log(codeValue);
+        // console.log(codeValue);
         setCurrentDrawValues([]);
         setClearDraw(true);
 

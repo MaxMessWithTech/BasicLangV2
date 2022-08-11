@@ -12,6 +12,9 @@ const PackageManager = (props) => {
 			axios({
 				method: "POST",
 				url: "/get-packages",
+				data:{
+					fileName: props.fileName,
+				},
 				headers: {
 					Authorization: `Bearer ${props.token}`,
 				}
@@ -30,7 +33,44 @@ const PackageManager = (props) => {
 	}, [props.open]);
 
 	const addPackage = (value) => {
+		if (props.open) {
+			axios({
+				method: "POST",
+				url: "/select-package",
+				data:{
+					fileName: props.fileName,
+					packageName: value['_package'],
+				},
+				headers: {
+					Authorization: `Bearer ${props.token}`,
+				}
+			}).then((response) => {
+				if (response.data === "Removed Successfully") {
+					const tempPackages = packages.slice();
+					tempPackages[value['id']] = {
+						...tempPackages[value['id']],
+						selected: false
+					};
+					setPackages(tempPackages);
 
+				} else if (response.data === "Added Successfully") {
+					const tempPackages = packages.slice();
+
+					tempPackages[value['id']] = {
+						...tempPackages[value['id']],
+						selected: true
+					};
+					setPackages(tempPackages);
+				}
+
+			}).catch((error) => {
+				if (error.response) {
+					// console.log(error.response)
+					// console.log(error.response.status)
+					// console.log(error.response.headers)
+				}
+			})
+		}
 	};
 
 	return (
@@ -50,7 +90,9 @@ const PackageManager = (props) => {
 						<ul className="list-group">
 							{
 								packages.map((_package) =>
-									<li className="list-group-item" key={_package.id} onClick={() => addPackage(_package._package)}>{_package._package}</li>
+									_package['selected'] === true ?
+										<li className="list-group-item active" key={_package.id} onClick={() => addPackage(_package)}>{_package._package}</li> :
+										<li className="list-group-item" key={_package.id} onClick={() => addPackage(_package)}>{_package._package}</li>
 								)
 							}
 						</ul>

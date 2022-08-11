@@ -57,8 +57,6 @@ def interpretObj(line, errorCallback, usePackages=list, headless=False, sendComm
 
 	global typesOfObjects
 
-	print(usePackages)
-
 	if len(usePackages) != 0:
 		for _module in sectionedTypesOfObjects:
 			if _module['name'] in usePackages:

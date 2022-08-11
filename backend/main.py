@@ -197,8 +197,25 @@ def get_available_packages():
 	current_user = get_jwt_identity()
 
 	user = User.query.filter_by(email=current_user).first()
+
+	fileName = request.json.get("fileName", None)
+
 	if not user:
 		return 'Token Error', 401
+
+	if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id)))):
+		if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName + ".json"))):
+			meta = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName + ".json")), "r")
+			packageSelectionData = json.loads(meta.read())['usePackages']
+		else:
+			meta = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName + ".json")), "w+")
+			json.dump({'usePackages': []}, meta)
+
+			packageSelectionData = []
+	else:
+		return 'Something went wrong', 404
+
+	# print(packageSelectionData)
 
 	packages = list()
 
@@ -208,9 +225,52 @@ def get_available_packages():
 			# This imports the __init__.py file, and sets its reference to the module var
 			for package in dirs:
 				if package != "__pycache__":
-					packages.append({'_package': package, 'id': len(packages)})
+					if package in packageSelectionData:
+						selected = True
+					else:
+						selected = False
+					packages.append({'_package': package, 'id': len(packages), 'selected': selected})
 
 	return jsonify(packages), 200
+
+
+@app.route('/select-package', methods=["POST"])
+@jwt_required()
+def select_package():
+	current_user = get_jwt_identity()
+
+	user = User.query.filter_by(email=current_user).first()
+
+	fileName = request.json.get("fileName", None)
+	package = request.json.get("packageName", None)
+
+	if not user:
+		return 'Token Error', 401
+
+	if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id)))):
+		_file = os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName + ".json"))
+		if exists(_file):
+			packageSelectionData = json.load(open(_file, 'r'))["usePackages"]
+			# print(packageSelectionData)
+		else:
+			packageSelectionData = []
+	else:
+		return 'Something went wrong', 404
+
+	if package in packageSelectionData:
+		newVal = packageSelectionData.remove(package)
+		# If there's nothing in the list after the remove function, it sets the value to null, so this prevents that
+		if newVal is None:
+			newVal = list()
+		json.dump({'usePackages': newVal}, open(_file, 'w'))
+
+		# DON'T CHANGE, packageManager.js is reliant on this
+		return 'Removed Successfully', 201
+	else:
+		json.dump({'usePackages': packageSelectionData + [package]}, open(_file, 'w'))
+
+		# DON'T CHANGE, packageManager.js is reliant on this
+		return 'Added Successfully', 201
 
 
 @app.route('/create-file', methods=["POST"])
@@ -229,14 +289,18 @@ def create_file():
 
 	if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id)))):
 		if exists(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName))):
-			file = open(
-				os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "r")
+			open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "r")
+			meta = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName + ".json")), "w+")
+			json.dump({'usePackages': []}, meta)
 		else:
-			file = open(
-				os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w+")
+			open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w+")
+			meta = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName + ".json")), "w+")
+			json.dump({'usePackages': []}, meta)
 	else:
 		os.mkdir(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id))))
-		file = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w+")
+		open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName)), "w+")
+		meta = open(os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName + ".json")), "w+")
+		json.dump({'usePackages': []}, meta)
 
 	# emit("setCode", {'data': file.read(), 'fileName': 'script.bsl'})
 	return "Created", 201
@@ -316,7 +380,7 @@ def execution_callback(cmd, data, **kwargs):
 @socketio.on('sendCode')
 @jwt_required()
 def handle_send_code(code, fileName):
-	print(f"Send Code! {code}")
+	# print(f"Send Code! {code}")
 
 	handle_save(code, fileName)
 
@@ -327,13 +391,18 @@ def handle_send_code(code, fileName):
 		return 'Token Error', 401
 
 	filePath = os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName))
+	metaPath = os.path.realpath(os.path.join(os.path.dirname(__file__), '../storage', str(user.id), fileName + ".json"))
 
 	file_exists = exists(filePath)
 	if file_exists:
+		usePackages = list()
+		if exists(metaPath):
+			usePackages = json.load(open(metaPath, 'r'))["usePackages"]
+
 		file = open(filePath, "r")
 		# print(file.readlines())
 		# file.write(code)
-		main.run(file, usePackages=["WEEEEEE"], sendCommandCallback=execution_callback)
+		main.run(file, usePackages=usePackages, sendCommandCallback=execution_callback)
 	else:
 		print(f"{blcolors.RED}Invalid filename: {repr(filePath)}{blcolors.CLEAR}")
 

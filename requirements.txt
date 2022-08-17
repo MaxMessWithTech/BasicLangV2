@@ -12,9 +12,7 @@ cryptography==3.1.1
 daphne==3.0.2
 defusedxml==0.6.0
 diff-match-patch==20200713
-Django==3.1.2
 django-better-admin-arrayfield==1.4.0
-django-cors-headers==3.11.0
 django-import-export==2.4.0
 djangorestframework==3.12.2
 dnspython==2.2.1
